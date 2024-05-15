@@ -1,0 +1,26 @@
+stages:
+  - build  # Estágio de construção
+  - test  # Estágio de teste
+
+default:
+  image: node:lts-alpine3.19  # Imagem padrão para os jobs
+
+build_job:
+  stage: build  # Define o estágio do job
+  cache:
+    key: node-modules  # Chave para o cache das dependências
+    paths:
+      - app/node_modules/  # Caminho para o cache das dependências
+  script:
+    - cd app  # Navega para o diretório "app"
+    - npm install  # Instala as dependências do projeto usando o npm
+
+test_job:
+  stage: test  # Define o estágio do job
+  cache:
+    key: node-modules # Chave para o cache das dependências
+    paths:
+      - app/node_modules/  # Caminho para o cache das dependências
+  script:
+    - cd app  # Navega para o diretório "app"
+    - npm test  # Executa os testes do projeto usando o npm
