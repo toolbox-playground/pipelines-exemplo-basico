@@ -1,12 +1,12 @@
-pipelines:
-  default:
-  - step:
-      name: Build and Test
-      image: node:lts-alpine3.19
-      caches:
-            - node
-      script:
-        - apk update && apk add nodejs npm
-        - cd app
-        - npm install
-        - npm test
+pipelines:  # Define a seção "pipelines" do arquivo YAML
+  default:  # Define a seção "default" dentro da seção "pipelines"
+  - step:  # Define um passo dentro da seção "default"
+      name: Build and Test  # Define o nome do passo como "Build and Test"
+      image: node:lts-alpine3.19  # Define a imagem do Docker a ser usada para executar o passo
+      caches:  # Define a seção "caches" dentro do passo
+            - node  # Define um cache chamado "node"
+      script:  # Define a seção "script" dentro do passo
+        - apk update && apk add nodejs npm  # Atualiza o sistema operacional Alpine e instala o Node.js e o npm
+        - cd app  # Navega para o diretório "app"
+        - npm install  # Instala as dependências do projeto usando o npm
+        - npm test  # Executa os testes do projeto usando o npm
