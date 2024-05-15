@@ -1,47 +1,12 @@
-image: node:lts-alpine3.19
-
 pipelines:
-## Quando abrir um PR para o resposit�rio, iremos validar a estrutura do arquivo que ser� commitado
-  pull-requests:
-    "**":
-    - step:
-        name: Install and Test on every PR
-        caches:
-          - node
-        script:
-          - apk update && apk add nodejs npm
-          - cd app
-          - npm install
-          - npm test
-  branches:
-    '{master}':
-      - step:
-          name: Install and Test in every Merge on Master
-          caches:
+  default:
+  - step:
+      name: Build and Test
+      image: node:lts-alpine3.19
+      caches:
             - node
-          condition:
-              changesets:
-                  includePaths:
-                    - "app/**"
-                    - "bitbucket-pipelines.yml"
-          script:
-            - apk update && apk add nodejs npm
-            - cd app
-            - npm install
-            - npm test
-
-  custom: # Pipelines that are triggered manually
-    manually: # The name that is displayed in the list in the Bitbucket Cloud GUI
-      - step:
-          name: Install and Test only manually 
-          caches:
-            - node
-          script:
-            - apk update && apk add nodejs npm
-            - cd app
-            - npm install
-            - npm test
-          
-# Este é um comentário de exemplo
-# Você pode adicionar comentários em qualquer lugar do arquivo
-# Comentários são úteis para explicar o código ou fazer anotações
+      script:
+        - apk update && apk add nodejs npm
+        - cd app
+        - npm install
+        - npm test
