@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToolBox Company</title>
+    <link rel="icon" type="image/x-icon" href="profile">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          screens: {
+            sm: "480px",
+            md: "760px",
+            lg: "976px",
+            xl: "1440px",
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  </head>
+  <body class="bg-slate-100">
+    <div class="container flex flex-col">
+        <div class="m-auto my-10 md:my-10 md:m-auto">
+            <h1 class="text-bold text-4xl">
+                Welcome to Node Test Image from ToolBox Company
+            </h1>
+        </div>
+        <div class="max-w-sm m-auto mt-20">
+            <img src='profile' class="rounded-full animate-bounce">
+        </div>
+    </div>
+  </body>
+</html>
