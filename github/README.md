@@ -42,6 +42,9 @@ Vamos analisar cada linha de código no arquivo [.github/workflows/main.yml](.gi
     Os comandos executados neste job são:
 
     `cd app`: Navegar para o diretório "app".
+    `npm install`: Instalar as dependências do projeto usando o npm.
+
+    `cd app`: Navegar para o diretório "app".
     `npm test`: Executar os testes do projeto usando o npm.
 
 Essas são as explicações para cada linha do código YAML fornecido. Cada linha desempenha um papel específico na definição do processo de integração contínua e na execução dos jobs necessários para compilar e testar o aplicativo.
