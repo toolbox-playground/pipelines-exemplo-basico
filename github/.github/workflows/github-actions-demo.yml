@@ -1,16 +1,19 @@
-name: GitHub Actions Demo
-on:
-  push:
-    branches:
-      - main
+name: GitHub Actions Demo  # Nome do fluxo de trabalho
 
-jobs:
-  build:
-    runs-on: node:lts-alpine3.19
+on: [push]  # Evento que aciona o fluxo de trabalho (no caso, um push)
 
-    steps:
-      - name: Install dependencies
-        run: npm install
+jobs:  # Definição dos trabalhos a serem executados
+  build:  # Nome do trabalho
 
-      - name: Run tests
-        run: npm test
+    runs-on: ubuntu-latest  # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+
+    steps:  # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4  # Passo para fazer o checkout do repositório
+      - name: Use Node.js  # Nome do passo
+        uses: actions/setup-node@v4  # Passo para configurar o ambiente Node.js
+        with:
+          node-version: '18.x'  # Versão do Node.js a ser usada
+      - name: Install dependencies  # Nome do passo
+        run: cd app && npm install  # Comando para instalar as dependências do projeto
+      - name: Run tests  # Nome do passo
+        run: cd app && npm test  # Comando para executar os testes do projeto
