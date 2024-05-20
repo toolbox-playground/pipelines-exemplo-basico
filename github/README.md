@@ -24,6 +24,8 @@ Vamos analisar cada linha de código no arquivo [.github/workflows/main.yml](.gi
 
 - `on`: O evento que aciona o fluxo de trabalho. Neste caso, está definido como `push`, o que significa que o fluxo de trabalho será acionado sempre que houver um push no repositório.
 
+- `paths-ignore`: Define os arquivos que devem ser ignorados pelo fluxo de trabalho. No exemplo fornecido, os arquivos README.md e .gitignore são especificados para serem ignorados. Isso significa que, quando ocorrer um push no repositório, o fluxo de trabalho não será acionado se apenas esses arquivos forem modificados.
+
 - `jobs`: Cada job é definido como uma seção separada no arquivo YAML. Os jobs são executados em paralelo dentro de cada estágio.
 
 - Job `build`: Este job é responsável por compilar o projeto. Ele usa o `ubuntu-latest` como ambiente virtual para executar os comandos.
