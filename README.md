@@ -12,6 +12,66 @@ Os pipelines geralmente são configurados usando ferramentas de integração con
 
 Os exemplos neste repositório podem servir como ponto de partida para configurar seus próprios pipelines de acordo com as necessidades do seu projeto.
 
+## Uso
+
+1. Abra o terminal ou prompt de comando e navegue até um diretório de sua prefrência. Substitua `suapasta` pelo nome do seu diretório:
+   ```bash
+   cd suapasta
+   ```
+
+3.Clone este repositório para sua máquina local através do comando abaixo:
+```bash
+git clone https://github.com/toolbox-playground/exemplos-pipelines.git
+```
+
+4. Navegue até o diretório que você acabou de clonar.
+
+   ```bash
+    cd exemplos-pipelines
+   ```
+
+5. Escolha a pipeline de sua prefrência disponível:
+
+- BitBucket:
+
+1. Navegue até o diretório NodeJs.
+   ```bash
+   cd bitbucket
+   ```
+2. Siga as instruções do [BitBucket](./bitbucket/README.md).
+
+- GutHub:
+
+1. Navegue até o diretório GitHub.
+   ```bash
+   cd github
+   ```
+2. Siga as instruções do [GitHub](./guthub/README.md)
+
+- GitLab:
+
+1. Navegue até o diretório GitLab.
+   ```bash
+   cd gitlab
+   ```
+2. Siga as instruções do [GitLab](./gitlab/README.md)
+
+- Harness:
+
+1. Navegue até o diretório Harness.
+   ```bash
+   cd harness
+   ```
+2. Siga as instruções do [Harness](./harness/README.md)
+
+- Go:
+
+1. Navegue até o diretório Go.
+   ```bash
+   cd go
+   ```
+2. Siga as instruções do [Go](./go/README.md)
+
 ## Contribuindo
 
 Contribuições são bem-vindas! Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes.
