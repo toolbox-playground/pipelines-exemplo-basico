@@ -46,4 +46,6 @@ Vamos analisar cada linha do código do arquivo [.gitlab-ci.yml](.gitlab-ci.yml)
     `cd app`: Navega para o diretório "app".
     `npm test`: Executa os testes do projeto usando o npm.
 
+O arquivo para pipeline deve ter o nome `.gitlab-ci.yml` obrigatoriamente, e estar na raiz do projeto.
+
 Essas são as explicações para cada linha do código YAML fornecido. Cada linha desempenha um papel específico na definição do processo de integração contínua e na execução dos jobs necessários para construir e testar o aplicativo.
