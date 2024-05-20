@@ -19,18 +19,18 @@ Os exemplos neste repositório podem servir como ponto de partida para configura
    cd suapasta
    ```
 
-3.Clone este repositório para sua máquina local através do comando abaixo:
+2.Clone este repositório para sua máquina local através do comando abaixo:
 ```bash
 git clone https://github.com/toolbox-playground/exemplos-pipelines.git
 ```
 
-4. Navegue até o diretório que você acabou de clonar.
+3. Navegue até o diretório que você acabou de clonar.
 
    ```bash
     cd exemplos-pipelines
    ```
 
-5. Escolha a pipeline de sua prefrência disponível:
+4. Escolha a pipeline de sua prefrência disponível:
 
 - BitBucket:
 
