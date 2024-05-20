@@ -64,14 +64,6 @@ git clone https://github.com/toolbox-playground/exemplos-pipelines.git
    ```
 2. Siga as instruções do [Harness](./harness/README.md)
 
-- Go:
-
-1. Navegue até o diretório Go.
-   ```bash
-   cd go
-   ```
-2. Siga as instruções do [Go](./go/README.md)
-
 ## Contribuindo
 
 Contribuições são bem-vindas! Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes.
