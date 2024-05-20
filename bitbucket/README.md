@@ -44,4 +44,6 @@ Vamos analisar cada linha do código do arquivo [bitbucket-pipelines.yml](bitbuc
 
     - `npm test`: Essa linha executa os testes do projeto usando o npm. Os testes são uma parte importante do processo de desenvolvimento de software, pois ajudam a garantir que o código esteja funcionando corretamente.
 
+O arquivo para pipeline deve ter o nome `bitbucket-pipelines.yml` obrigatoriamente, e estar na raiz do projeto.
+
 Essas são as explicações para cada linha do código YAML fornecido. Cada linha desempenha um papel específico na definição do processo de integração contínua e na execução dos passos necessários para construir e testar o aplicativo.
