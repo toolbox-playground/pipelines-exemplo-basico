@@ -40,13 +40,13 @@ git clone https://github.com/toolbox-playground/exemplos-pipelines.git
    ```
 2. Siga as instruções do [BitBucket](./bitbucket/README.md).
 
-- GutHub:
+- GitHub:
 
 1. Navegue até o diretório GitHub.
    ```bash
    cd github
    ```
-2. Siga as instruções do [GitHub](./guthub/README.md)
+2. Siga as instruções do [GitHub](./github/README.md)
 
 - GitLab:
 
