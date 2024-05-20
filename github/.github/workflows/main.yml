@@ -1,6 +1,10 @@
 name: GitHub Actions Demo  # Nome do fluxo de trabalho
 
-on: [push]  # Evento que aciona o fluxo de trabalho (no caso, um push)
+on: 
+  push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
+    paths-ignore:
+      - 'README.md'  # Ignora o arquivo README.md
+      - '.gitgnore'  # Ignora o arquivo .gitignore
 
 jobs:  # Definição dos trabalhos a serem executados
 
