@@ -34,7 +34,7 @@ git clone https://github.com/toolbox-playground/exemplos-pipelines.git
 
 - BitBucket:
 
-1. Navegue até o diretório NodeJs.
+1. Navegue até o diretório BitBucket.
    ```bash
    cd bitbucket
    ```
