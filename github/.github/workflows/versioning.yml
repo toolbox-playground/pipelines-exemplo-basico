@@ -1,0 +1,48 @@
+name: Versioning Control
+
+on: 
+    push:
+      branches:
+        - main
+      paths-ignore:
+        - 'CHANGELOG.md'
+        - 'package.json'
+        - 'package-lock.json'
+
+jobs: 
+    versioning-control:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                token: ${{ secrets.ACTIONS_TOKEN }}
+
+            - name: Install and Build
+              run: |
+                npm install
+
+            - name: Configuring Git Account
+              run: |
+                git config --global user.email "pipelines@toolboxdevops.cloud"
+                git config --global user.name "Toolbox Automation"
+
+            - name: Check commit message for specific keywords
+              run: |
+                text=$(git log -1 --no-merges --pretty=%B)
+                echo $text
+                if [[ $text =~ (fix|patch) ]]; then
+                  npm run release -- --release-as patch
+                  echo "{{ Patching Versioning }}"
+                elif [[ $text =~ (BREAKING\ CHANGE) ]]; then
+                  npm run release -- --release-as patch
+                  echo "{{ Major Versioning }}"
+                elif [[ $text =~ (feat) ]]; then
+                  echo "{{ Minor Versioning }}"
+                  npm run release -- --release-as minor
+                else
+                  npm run release -- --release-as patch
+                  echo {{ Default Patching Versioning }}
+                fi
+                git push --follow-tags origin main
