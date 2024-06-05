@@ -64,6 +64,30 @@ git clone https://github.com/toolbox-playground/exemplos-pipelines.git
    ```
 2. Siga as instruções do [Harness](./harness/README.md)
 
+- Azure:
+
+1. Navegue até o diretório Azure.
+   ```bash
+   cd azure
+   ```
+2. Siga as instruções do [Azure](./azure/README.md)
+
+## Desafio GitHub
+
+Para aprofundar um conhecimentos, faça o seguinte desafio no GitHub Actions:
+
+Crie uma pipeline complexa para fazer build de uma aplicação qualquer, pode ser até seu Hello World! Porém, desta vez, ao invés de simplesmente fazer o build, você deve escolher sua ferramenta CI/Cd preferida e criar uma pipeline que tenha os seguintes stages/jobs:
+1. Um trigger ou evento para que a pipeline inicie automaticamente ao alterar qualquer código no repositório.
+2. Um stage de build para realizar o compilar e buildar sua aplicação e empacotar essa aplicação em uma imagem docker.
+3. Você deve enviar seu container para um container registry qualquer.
+4. Um stage de testes que seja capaz de baixar seu container e executar sua aplicação - esse stage/job deve conter ao menos os testes unitário e ou de cobertura de código com sonarqube ou sonarcloud.
+5. Um stage dedicado a segurança que seja capaz de fazer download do seu repositório para scanear seu código ou então baixar seu containee e executar ele para percorrer uma varredura de código com Snyk ou outra ferramenta similar.
+6. O deploy da sua aplicação deve ser feito na infraestrutura de algum cloud provider, como por exemplo no Azure container instances ou Google Cloud Run ou AWS ECS.
+
+## Solução do Desafio utilizando GCP
+
+Siga as instruções do [Desafio GitHub Actions](./challenges/github/README.md)
+
 ## Contribuindo
 
 Contribuições são bem-vindas! Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes.
