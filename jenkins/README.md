@@ -19,3 +19,9 @@ Foi utlizado o [How to automate jenkins setup with docker and jenkins configurat
 ## Arquivo de configuração do Jenkins
 
 Para saber mais sobre o arquivo [casc.yaml](casc.yaml]), após subir o jenkins, acesse [http://localhost:8080/manage/configuration-as-code/reference](http://localhost:8080/manage/configuration-as-code/reference)
+
+## Build e Run 
+
+docker build -t jenkins:local .
+
+docker run --name jenkins --rm -p 8080:8080 --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:local
