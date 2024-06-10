@@ -1,0 +1,21 @@
+# This file is used to configure Jenkins using the Configuration as Code plugin
+jenkins: # This is the root element of the configuration
+  securityRealm: # This is the securityRealm element
+    local: # This is the local element
+      allowsSignup: false # This is the allowsSignup element
+      users: # This is the users element
+       - id: ${JENKINS_ADMIN_ID}
+         password: ${JENKINS_ADMIN_PASSWORD}
+  authorizationStrategy: # This is the authorizationStrategy element
+    globalMatrix: # This is the globalMatrix element
+      permissions: # This is the permissions element
+        - "Overall/Administer:admin" # This is the permission element
+        - "Overall/Read:authenticated" # This is the permission element
+  security: # This is the security element
+  queueItemAuthenticator: # This is the queueItemAuthenticator element
+    authenticators: # This is the authenticators element
+    - global: # This is the global element
+        strategy: triggeringUsersAuthorizationStrategy # This is the strategy element
+unclassified: # This is the root element of the configuration
+  location: # This is the location element
+    url: http://server_ip:8080/ # This is the URL of the Jenkins server
