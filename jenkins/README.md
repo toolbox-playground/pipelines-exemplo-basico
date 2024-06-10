@@ -28,4 +28,4 @@ Para saber mais sobre o arquivo [casc.yaml](casc.yaml]), após subir o jenkins, 
 
 docker build -t jenkins:local .
 
-docker run --name jenkins --rm -p 8080:8080 --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:local
+docker run --name jenkins --rm -p 8080:8080 -p 50000:50000 --volume jenkins-data:/var/jenkins_home --volume /var/run/docker.sock:/var/run/docker.sock --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:local
