@@ -11,7 +11,9 @@ jenkins: # This is the root element of the configuration
       permissions: # This is the permissions element
         - "Overall/Administer:admin" # This is the permission element
         - "Overall/Read:authenticated" # This is the permission element
-  security: # This is the security element
+  remotingSecurity:
+    enabled: true
+security: # This is the security element
   queueItemAuthenticator: # This is the queueItemAuthenticator element
     authenticators: # This is the authenticators element
     - global: # This is the global element

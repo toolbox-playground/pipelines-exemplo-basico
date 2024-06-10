@@ -15,3 +15,7 @@ Em resumo, o Jenkins e o Docker formam uma combinação poderosa para automatiza
 ## Passo-a-passo
 
 Foi utlizado o [How to automate jenkins setup with docker and jenkins configuration as code](https://www.digitalocean.com/community/tutorials/how-to-automate-jenkins-setup-with-docker-and-jenkins-configuration-as-code) como fonte de conhecimento.
+
+## Arquivo de configuração do Jenkins
+
+Para saber mais sobre o arquivo [casc.yaml](casc.yaml]), após subir o jenkins, acesse [http://localhost:8080/manage/configuration-as-code/reference](http://localhost:8080/manage/configuration-as-code/reference)
