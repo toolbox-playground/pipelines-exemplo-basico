@@ -20,6 +20,10 @@ Foi utlizado o [How to automate jenkins setup with docker and jenkins configurat
 
 Para saber mais sobre o arquivo [casc.yaml](casc.yaml]), após subir o jenkins, acesse [http://localhost:8080/manage/configuration-as-code/reference](http://localhost:8080/manage/configuration-as-code/reference)
 
+## Blue Ocean
+
+[https://www.jenkins.io/doc/book/blueocean/](https://www.jenkins.io/doc/book/blueocean/)
+
 ## Build e Run 
 
 docker build -t jenkins:local .
