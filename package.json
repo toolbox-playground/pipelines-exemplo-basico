@@ -1,6 +1,6 @@
 {
   "name": "pipelines-exemplo-basico",
-  "version": "1.0.42",
+  "version": "1.0.43",
   "description": "![Toolbox Playground](img/toolbox-playground.png)",
   "main": "index.js",
   "scripts": {
