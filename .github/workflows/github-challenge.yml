@@ -129,16 +129,20 @@ jobs:
       with: # Define os parâmetros do passo
         # Desativar o clone superficial é recomendado para melhorar a relevância dos relatórios
         fetch-depth: 0
-
-    - name: Set up SonarCloud # Configura o SonarCloud
-      run: | # Comando para configurar o SonarCloud. Coloca as variáveis dentro do arquivo sonar-project.properties 
-        sed -i 's/\${SONAR_PROJECT_KEY}/'"${{ secrets.SONAR_PROJECT_KEY }}"'/g' ./challenges/github/sonar-project.properties
-        sed -i 's/\${SONAR_ORG}/'"${{ secrets.SONAR_ORG }}"'/g' ./challenges/github/sonar-project.properties
-        sed -i 's/\${SONAR_TOKEN}/'"${{ secrets.SONAR_TOKEN }}"'/g' ./challenges/github/sonar-project.properties
-        sed -i 's/\${SONAR_PROJECT_NAME}/'"${{ secrets.SONAR_PROJECT_NAME }}"'/g' ./challenges/github/sonar-project.properties
         
     - name: SonarCloud Scan # Executa a análise do SonarCloud
       uses: sonarsource/sonarcloud-github-action@master # Usa a ação de análise do SonarCloud
+      with:
+        args: >
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+          -Dsonar.organization=${{ secrets.SONAR_ORG }}
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.projectName=${{ secrets.SONAR_PROJECT_NAME }}
+          -Dsonar.projectVersion=1.0
+          -Dsonar.sources=./challenges/github
+          -Dsonar.language=js
+          -Dsonar.sourceEncoding=UTF-8
       env: # Define as variáveis de ambiente
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
