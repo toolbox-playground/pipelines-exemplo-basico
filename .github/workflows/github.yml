@@ -1,0 +1,40 @@
+name: GitHub Actions Demo  # Nome do fluxo de trabalho
+
+on: 
+  push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
+    paths:
+      - 'github'  # Inclui a pasta github e todos os seus arquivos
+    paths-ignore:
+      - 'README.md'  # Ignora o arquivo README.md
+      - '.gitgnore'  # Ignora o arquivo .gitignore
+
+jobs:  # Definição dos trabalhos a serem executados
+
+  build:  # Nome do trabalho
+
+    runs-on: ubuntu-latest  # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+
+    steps:  # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4  # Passo para fazer o checkout do repositório
+      - name: Build Node.js  # Nome do passo
+        uses: actions/setup-node@v4  # Passo para configurar o ambiente Node.js
+        with:
+          node-version: '18.x'  # Versão do Node.js a ser usada
+      - name: Install dependencies  # Nome do passo
+        run: cd github/app && -npm install  # Comando para instalar as dependências do projeto
+
+  
+  test: # Nome do trabalho
+
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+
+    steps: # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4 # Passo para fazer o checkout do repositório
+      - name: Test Node.js # Nome do passo
+        uses: actions/setup-node@v4 # Passo para configurar o ambiente Node.js
+        with:
+          node-version: '18.x' # Versão do Node.js a ser usada
+      - name: Install dependencies # Nome do passo
+        run: cd cd github/app && npm install # Comando para instalar as dependências do projeto
+      - name: Run tests # Nome do passo
+        run: cd cd github/app && npm test # Comando para executar os testes do projeto
