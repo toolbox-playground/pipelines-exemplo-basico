@@ -59,6 +59,8 @@ jobs:
         uses: docker/metadata-action@v5 # Usa a ação de metadados do Docker
         with: # Define os parâmetros da ação
           images: "${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}"  # Define as imagens Docker a serem processadas
+          tags: | 
+            type=raw,value=latest
 
       - name: Build and push Docker image  # Constrói e envia a imagem Docker para o Docker Hub
         id: push # Define um ID para o passo
