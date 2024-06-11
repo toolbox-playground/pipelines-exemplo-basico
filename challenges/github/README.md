@@ -33,7 +33,7 @@ O Snyk é uma ferramenta de segurança de código aberto que verifica as depend�
 3. Adicionar o token aos segredos do GitHub no repositório.
 4. Configurar o Snyk no fluxo de trabalho do GitHub Actions para verificar as dependências do projeto.
 
-## Action Secrets
+## Action Secrets e Repository variables
 
 As varáveis abaixo devem ser salvas como secrets no GitHub Actions
 
