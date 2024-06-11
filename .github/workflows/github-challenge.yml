@@ -64,8 +64,8 @@ jobs:
         id: push # Define um ID para o passo
         uses: docker/build-push-action@v5 # Usa a ação de construção e envio de imagem do Docker
         with: # Define os parâmetros da ação
-          context: .  # Define o contexto do build, neste caso, o diretório atual
-          file: ./challenges/github/Dockerfile  # Especifica o arquivo Dockerfile a ser usado
+          context: ./challenges/github  # Define o contexto do build, neste caso, o diretório atual
+          # file: ./Dockerfile  # Especifica o arquivo Dockerfile a ser usado
           push: true  # Define se a imagem deve ser enviada para o Docker Hub
           tags: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest,${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.run_number }}  # Define as tags da imagem com base nos metadados extraídos
           labels: ${{ steps.meta.outputs.labels }}  # Define as labels da imagem com base nos metadados extraídos
@@ -155,6 +155,6 @@ jobs:
       - name: Run Snyk to check for vulnerabilities # Executa o Snyk para verificar vulnerabilidades
         uses: snyk/actions/node@master # Usa a ação do Snyk para Node.js
         with: # Define os parâmetros da ação
-          args: --all-projects --project-path=./challenges/github # Veirifica todas as dependências do projeto
+          args: --all-projects --packages-folder=./challenges/github # Veirifica todas as dependências do projeto
         env: # Define as variáveis de ambiente
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Define o token do Snyk
