@@ -1,0 +1,156 @@
+name: Publish Docker image version
+
+on:
+  push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
+    paths:
+      - 'challenges/github' # Inclui a pasta challenges/github e todos os seus arquivos
+
+jobs:
+
+  build:  # Nome do trabalho
+    name: Build Node.js  # Nome do trabalho
+    runs-on: ubuntu-latest  # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    steps:  # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4  # Passo para fazer o checkout do repositório
+      - name: Build Node.js  # Nome do passo
+        uses: actions/setup-node@v4  # Passo para configurar o ambiente Node.js
+        with:
+          node-version: '18.x'  # Versão do Node.js a ser usada
+      - name: Install dependencies  # Nome do passo
+        run: cd challenges/github/app && npm install  # Comando para instalar as dependências do projeto
+
+  
+  test: # Nome do trabalho
+    name: Test Node.js # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    needs: build # Define que o trabalho depende do trabalho "build"
+    steps: # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4 # Passo para fazer o checkout do repositório
+      - name: Test Node.js # Nome do passo
+        uses: actions/setup-node@v4 # Passo para configurar o ambiente Node.js
+        with:
+          node-version: '18.x' # Versão do Node.js a ser usada
+      - name: Install dependencies # Nome do passo
+        run: cd challenges/github/app && npm install # Comando para instalar as dependências do projeto
+      - name: Run tests # Nome do passo
+        run: cd challenges/github/app && npm test # Comando para executar os testes do projeto
+
+  push_to_registry:
+    name: Build and Push Docker image to Docker Hub and Deploy on Cloud Run
+    runs-on: ubuntu-latest  # Define o sistema operacional em que o fluxo de trabalho será executado
+    needs: test  # Define que o trabalho depende do trabalho "test"
+    permissions: # Define as permissões necessárias para o trabalho
+      packages: write # Define as permissões de escrita para pacotes
+      contents: read # Define as permissões de leitura para conteúdos
+      id-token: write # Define as permissões de escrita para tokens de ID
+      attestations: write # Define as permissões de escrita para atestações
+    steps: # Define os passos a serem executados no trabalho
+      - name: Check out the repo  # Faz o checkout do repositório
+        uses: actions/checkout@v4 # Usa a ação de checkout do repositório
+
+      - name: Log in to Docker Hub  # Faz login no Docker Hub
+        uses: docker/login-action@v3 # Usa a ação de login no Docker Hub
+        with: # Define os parâmetros da ação
+          username: ${{ secrets.DOCKER_USERNAME }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para username
+          password: ${{ secrets.DOCKER_PASSWORD }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para password
+
+      - name: Extract metadata (tags, labels) for Docker  # Extrai metadados (tags, labels) para o Docker
+        id: meta # Define um ID para o passo
+        uses: docker/metadata-action@v5 # Usa a ação de metadados do Docker
+        with: # Define os parâmetros da ação
+          images: "${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}"  # Define as imagens Docker a serem processadas
+
+      - name: Build and push Docker image  # Constrói e envia a imagem Docker para o Docker Hub
+        id: push # Define um ID para o passo
+        uses: docker/build-push-action@v5 # Usa a ação de construção e envio de imagem do Docker
+        with: # Define os parâmetros da ação
+          context: .  # Define o contexto do build, neste caso, o diretório atual
+          file: ./challenges/github/Dockerfile  # Especifica o arquivo Dockerfile a ser usado
+          push: true  # Define se a imagem deve ser enviada para o Docker Hub
+          tags: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest,${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.run_number }}  # Define as tags da imagem com base nos metadados extraídos
+          labels: ${{ steps.meta.outputs.labels }}  # Define as labels da imagem com base nos metadados extraídos
+
+      - name: Generate artifact attestation  # Gera uma atestação de artefato
+        uses: actions/attest-build-provenance@v1 # Usa a ação de atestação de proveniência de build
+        with: # Define os parâmetros da ação
+          subject-name: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
+          subject-digest: ${{ steps.push.outputs.digest }}  # Define o digest do assunto da atestação
+          push-to-registry: true  # Define se a atestação deve ser enviada para o registro      
+        
+      - name: Deploy on Cloud Run # Faz o deploy da aplicação no Cloud Run
+        uses: 'google-github-actions/auth@v2' # Usa a ação de autenticação do Google Cloud
+        with: # Define os parâmetros da ação
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTIFIER_PROVIDER }} # Define o provedor de identidade do workload
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # Define a conta de serviço
+        
+      - id: 'deploy' # Define um ID para o passo
+        uses: 'google-github-actions/deploy-cloudrun@v2' # Usa a ação de deploy no Cloud Run
+        with: # Define os parâmetros da ação
+          service: 'nodejs-toolbox-playground' # Define o nome do serviço no Cloud Run
+          image: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest # Define a imagem a ser usada no Cloud Run
+        
+      - name: 'Use output' # Usa a saída do passo anterior
+        run: 'curl "${{ steps.deploy.outputs.url }}"' # Usa a URL do serviço no Cloud Run
+        continue-on-error: true # Continua a execução mesmo se houver erro
+
+  docker_test: # Nome do trabalho
+    name: Run Docker Container # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    needs: push_to_registry # Define que o trabalho depende do trabalho "push_to_registry"
+
+    steps: # Passos a serem executados no trabalho
+      
+    - name: Checkout repository # Faz o checkout do repositório
+      uses: actions/checkout@v2 # Usa a ação de checkout do repositório
+
+    - name: Login to Docker Hub # Faz login no Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin # Usa as credenciais do Docker Hub armazenadas como secretos no repositório
+
+    - name: Pull Docker Image # Faz o pull da imagem Docker
+      run: docker pull ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest # Usa as credenciais do Docker Hub armazenadas como secretos no repositório
+
+    - name: Run Docker Container # Executa o container Docker
+      run: docker run -d --name nodejs ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório
+
+    - name: Wait for Container to be ready # Espera o container estar pronto
+      run: sleep 10 # Espera 10 segundos
+
+    - name: Check if container is running # Verifica se o container está rodando
+      run: docker ps -a # Checa se o container está rodando
+
+    - name: Stop and Remove Docker Container # Para e remove o container Docker
+      run: docker rm -f nodejs # Para e remove o container Docker
+
+  sonarcloud: # Nome do trabalho
+    name: SonarCloud Scan # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    steps: # Passos a serem executados no trabalho
+    - uses: actions/checkout@v3 # Passo para fazer o checkout do repositório
+      with: # Define os parâmetros do passo
+        # Desativar o clone superficial é recomendado para melhorar a relevância dos relatórios
+        fetch-depth: 0
+
+    - name: Set up SonarCloud # Configura o SonarCloud
+      run: | # Comando para configurar o SonarCloud. Coloca as variáveis dentro do arquivo sonar-project.properties 
+        sed -i 's/\${SONAR_PROJECT_KEY}/'"${{ secrets.SONAR_PROJECT_KEY }}"'/g' ./challenges/github/sonar-project.properties
+        sed -i 's/\${SONAR_ORG}/'"${{ secrets.SONAR_ORG }}"'/g' ./challenges/github/sonar-project.properties
+        sed -i 's/\${SONAR_TOKEN}/'"${{ secrets.SONAR_TOKEN }}"'/g' ./challenges/github/sonar-project.properties
+        sed -i 's/\${SONAR_PROJECT_NAME}/'"${{ secrets.SONAR_PROJECT_NAME }}"'/g' ./challenges/github/sonar-project.properties
+        
+    - name: SonarCloud Scan # Executa a análise do SonarCloud
+      uses: sonarsource/sonarcloud-github-action@master # Usa a ação de análise do SonarCloud
+      env: # Define as variáveis de ambiente
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  snyk: # Nome do trabalho
+    name: Snyk Security Check # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    steps: # Passos a serem executados no trabalho
+      - uses: actions/checkout@master # Passo para fazer o checkout do repositório
+      - name: Run Snyk to check for vulnerabilities # Executa o Snyk para verificar vulnerabilidades
+        uses: snyk/actions/node@master # Usa a ação do Snyk para Node.js
+        with: # Define os parâmetros da ação
+          args: --all-projects --project-path=./challenges/github # Veirifica todas as dependências do projeto
+        env: # Define as variáveis de ambiente
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Define o token do Snyk
