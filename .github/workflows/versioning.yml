@@ -8,6 +8,10 @@ on:
         - 'CHANGELOG.md'
         - 'package.json'
         - 'package-lock.json'
+    workflow_dispatch: # Evento que aciona o fluxo de trabalho manualmente
+      inputs: # Define os inputs do fluxo de trabalho
+        name: # Define o input "name"
+          description: 'Trigger manual do Workflow' # Descrição do input
 
 jobs: 
     versioning-control:
