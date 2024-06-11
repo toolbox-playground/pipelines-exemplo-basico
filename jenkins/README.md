@@ -12,20 +12,35 @@ O Jenkins também oferece plugins que aprimoram sua integração com o Docker. P
 
 Em resumo, o Jenkins e o Docker formam uma combinação poderosa para automatizar processos de desenvolvimento de software. Ao aproveitar as capacidades de containerização do Docker, você pode obter compilações consistentes, utilização eficiente de recursos e pipelines de CI/CD escaláveis.
 
+Neste repositório será utlizado a imagem docker do jenkins (jenkins/jenkins:lts-jdk17)[https://hub.docker.com/r/jenkins/jenkins/]
+
 ## Passo-a-passo
 
-Foi utlizado o [How to automate jenkins setup with docker and jenkins configuration as code](https://www.digitalocean.com/community/tutorials/how-to-automate-jenkins-setup-with-docker-and-jenkins-configuration-as-code) como fonte de conhecimento.
+1. Certifique-se de ter o Docker instalado em sua máquina. Você pode baixar e instalar o Docker a partir do site oficial: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).
+
+2. Certifique-se que você está dentro do diretório `exemplos-pipelines/jenkins`.
+
+3. Construa a imagem Docker:
+    ```bash
+    docker build -t jenkins:local .
+    ```
+    Obs.: Certifique-se que seu Docker está rodando.
+
+4. Execute o contêiner Docker:
+    ```bash
+    docker run --name jenkins --rm -p 8080:8080 -p 50000:50000 --volume jenkins-data:/var/jenkins_home --volume /var/run/docker.sock:/var/run/docker.sock --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:local
+    ```
+
+5. Abra seu navegador e visite `http://localhost:8080` para ver a página inicial do Jenkins.
+
+6. Será solicitado o usuário e senha, que foram definidos no docker run, --env JENKINS_ADMIN_ID=`admin` --env JENKINS_ADMIN_PASSWORD=`password`
 
 ## Arquivo de configuração do Jenkins
+
+Foi utlizado o [How to automate jenkins setup with docker and jenkins configuration as code](https://www.digitalocean.com/community/tutorials/how-to-automate-jenkins-setup-with-docker-and-jenkins-configuration-as-code) como fonte de conhecimento.
 
 Para saber mais sobre o arquivo [casc.yaml](casc.yaml]), após subir o jenkins, acesse [http://localhost:8080/manage/configuration-as-code/reference](http://localhost:8080/manage/configuration-as-code/reference)
 
 ## Blue Ocean
 
 [https://www.jenkins.io/doc/book/blueocean/](https://www.jenkins.io/doc/book/blueocean/)
-
-## Build e Run 
-
-docker build -t jenkins:local .
-
-docker run --name jenkins --rm -p 8080:8080 -p 50000:50000 --volume jenkins-data:/var/jenkins_home --volume /var/run/docker.sock:/var/run/docker.sock --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:local
