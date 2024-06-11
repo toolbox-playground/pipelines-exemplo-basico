@@ -89,7 +89,8 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v2' # Usa a ação de deploy no Cloud Run
         with: # Define os parâmetros da ação
           service: 'nodejs-toolbox-playground-exemplo' # Define o nome do serviço no Cloud Run
-          image: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest # Define a imagem a ser usada no Cloud Run
+          #image: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest # Define a imagem a ser usada no Cloud Run
+          image: docker.io/toolboxplayground/pipelines-exemplo-basico-desafio:latest # Define a imagem a ser usada no Cloud Run
         
       - name: 'Use output' # Usa a saída do passo anterior
         run: 'curl "${{ steps.deploy.outputs.url }}"' # Usa a URL do serviço no Cloud Run
