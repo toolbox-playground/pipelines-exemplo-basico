@@ -1,29 +1,20 @@
-# Use the latest Jenkins
-FROM jenkins/jenkins:lts-jdk17
-# Default user is jenkins
-USER root
+# Usa a imagem base oficial do Node.js 12.12.0-alpine
+FROM node:18-alpine
 
-# Install Docker CLI
-RUN apt-get update -qq \
-    && apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-RUN add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/debian \
-   $(lsb_release -cs) \
-   stable"
-RUN apt-get update  -qq \
-    && apt-get -y install docker-ce
-RUN usermod -aG docker jenkins
+# Cria um diretório chamado "node-app" dentro do diretório home do container
+RUN mkdir -p /home/node-app
 
-# Disable setup wizard
-ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+# Define o diretório de trabalho como /home/node-app/ dentro do container
+WORKDIR /home/node-app/
 
-# Set the Jenkins configuration as code environment variable
-ENV CASC_JENKINS_CONFIG /var/jenkins_home/casc.yaml
+# Copia todos os arquivos e diretórios do diretório atual (onde o Dockerfile está localizado) para o diretório /home/node-app/ dentro do container
+COPY /app .
 
-# Install plugins
-COPY --chown=jenkins:jenkins plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
+# Executa o comando "npm install" para instalar as dependências especificadas no arquivo package.json.
+RUN npm install
 
-# Copy configuration as code
-COPY casc.yaml /var/jenkins_home/casc.yaml
+# Exponha a porta 8080
+EXPOSE 8080
+
+CMD ["npm", "start"]
+# Define o comando padrão a ser executado quando o container é iniciado. Neste caso, ele executa o comando "node app/server.js", que inicia o servidor Node.js.
