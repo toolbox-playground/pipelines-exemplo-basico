@@ -50,6 +50,8 @@ As varáveis abaixo devem ser salvas como secrets no GitHub Actions
 11. SONAR_TOKEN: Token de autenticação para o SonarCloud
 12. WORKLOAD_IDENTIFIER_PROVIDER: URL do Pool do Identificador de Carga de Trabalho
 
+E salvar DOCKER_REGISTRY: https://docker.io/ também como Repository Variables.
+
 ## Deploy na Cloud Run
 A Cloud Run é uma plataforma de execução de contêineres gerenciada pelo Google Cloud. Para realizar o deploy na Cloud Run, é necessário seguir os seguintes passos:
 
