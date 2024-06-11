@@ -73,8 +73,8 @@ jobs:
       - name: Generate artifact attestation  # Gera uma atestação de artefato
         uses: actions/attest-build-provenance@v1 # Usa a ação de atestação de proveniência de build
         with: # Define os parâmetros da ação
-          subject-path: './challenges/github'
-          subject-name: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
+          #subject-name: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
+          subject-name: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
           subject-digest: ${{ steps.push.outputs.digest }}  # Define o digest do assunto da atestação
           push-to-registry: true  # Define se a atestação deve ser enviada para o registro      
         
@@ -156,6 +156,7 @@ jobs:
       - name: Run Snyk to check for vulnerabilities # Executa o Snyk para verificar vulnerabilidades
         uses: snyk/actions/node@master # Usa a ação do Snyk para Node.js
         with: # Define os parâmetros da ação
-          args: --all-projects --packages-folder=./challenges/github # Veirifica todas as dependências do projeto
+          #args: --all-projects --packages-folder=./challenges/github # Veirifica todas as dependências do projeto
+          args: --packages-folder=./challenges/github/app # Veirifica todas as dependências do projeto
         env: # Define as variáveis de ambiente
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Define o token do Snyk
