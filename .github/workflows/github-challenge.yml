@@ -3,7 +3,7 @@ name: Publish Docker image version
 on:
   push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
     paths:
-      - 'challenges/github' # Inclui a pasta challenges/github e todos os seus arquivos
+      - './challenges/github' # Inclui a pasta challenges/github e todos os seus arquivos
 
 jobs:
 
@@ -67,7 +67,7 @@ jobs:
           context: ./challenges/github  # Define o contexto do build, neste caso, o diretório atual
           # file: ./Dockerfile  # Especifica o arquivo Dockerfile a ser usado
           push: true  # Define se a imagem deve ser enviada para o Docker Hub
-          tags: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest,${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.run_number }}, ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.meta.outputs.tags }}  # Define as tags da imagem com base nos metadados extraídos
+          tags: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest,${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.run_number }}  # Define as tags da imagem com base nos metadados extraídos
           labels: ${{ steps.meta.outputs.labels }}  # Define as labels da imagem com base nos metadados extraídos
 
       - name: Generate artifact attestation  # Gera uma atestação de artefato
