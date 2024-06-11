@@ -72,12 +72,12 @@ jobs:
           tags: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:latest,${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.run_number }}  # Define as tags da imagem com base nos metadados extraídos
           labels: ${{ steps.meta.outputs.labels }}  # Define as labels da imagem com base nos metadados extraídos
 
-      - name: Generate artifact attestation  # Gera uma atestação de artefato
-        uses: actions/attest-build-provenance@v1 # Usa a ação de atestação de proveniência de build
-        with: # Define os parâmetros da ação
-          subject-name: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
-          subject-digest: ${{ steps.push.outputs.digest }}  # Define o digest do assunto da atestação
-          push-to-registry: true  # Define se a atestação deve ser enviada para o registro      
+      # - name: Generate artifact attestation  # Gera uma atestação de artefato
+      #   uses: actions/attest-build-provenance@v1 # Usa a ação de atestação de proveniência de build
+      #   with: # Define os parâmetros da ação
+      #     subject-name: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
+      #     subject-digest: ${{ steps.push.outputs.digest }}  # Define o digest do assunto da atestação
+      #     push-to-registry: true  # Define se a atestação deve ser enviada para o registro      
         
       - name: Deploy on Cloud Run # Faz o deploy da aplicação no Cloud Run
         uses: 'google-github-actions/auth@v2' # Usa a ação de autenticação do Google Cloud
