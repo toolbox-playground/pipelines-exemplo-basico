@@ -89,7 +89,7 @@ gcloud iam workload-identity-pools providers create-oidc github-actions-oidc \
 --attribute-condition="assertion.repository_owner=='toolbox-playground'"
 ```
 
-Lembrar de substituir a service-accounts para a sua chave de serviço e o principalSet para o seu provedor criado no GCP.
+Lembrar de substituir a service-accounts para a sua chave de serviço, o principalSet para o seu provedor criado no GCP e nome do repositório que você quer autorizar.
 
 ```bash
 gcloud iam service-accounts add-iam-policy-binding github-actions@toolbox-sandbox-388523.iam.gserviceaccount.com \
