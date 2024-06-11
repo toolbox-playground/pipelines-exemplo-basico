@@ -3,7 +3,7 @@ name: GitHub Actions Demo  # Nome do fluxo de trabalho
 on: 
   push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
     paths:
-      - 'github'  # Inclui a pasta github e todos os seus arquivos
+      - 'github/**'  # Inclui a pasta github e todos os seus arquivos
 
 jobs:  # Definição dos trabalhos a serem executados
 
