@@ -96,7 +96,7 @@ Lembrar de substituir a service-accounts para a sua chave de serviço, o princip
 ```bash
 gcloud iam service-accounts add-iam-policy-binding github-actions@toolbox-sandbox-388523.iam.gserviceaccount.com \
   --role="roles/iam.workloadIdentityUser" \
---member="principalSet://iam.googleapis.com/projects/794011605223/locations/global/workloadIdentityPools/github-toolbox-actions-pool/attribute.repository/toolbox-playground/pipelines-exemplo-basico-desafio"
+--member="principalSet://iam.googleapis.com/projects/794011605223/locations/global/workloadIdentityPools/github-toolbox-actions-pool/attribute.repository/toolbox-playground/pipelines-exemplo-basico"
 ```
 
 ### Acesso para usuários não autenticados
