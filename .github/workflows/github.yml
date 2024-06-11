@@ -4,6 +4,10 @@ on:
   push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
     paths:
       - './github/**'  # Inclui a pasta github e todos os seus arquivos
+  workflow_dispatch: # Evento que aciona o fluxo de trabalho manualmente
+    inputs: # Define os inputs do fluxo de trabalho
+      name: # Define o input "name"
+        description: 'Trigger manual do Workflow' # Descrição do input
 
 jobs:  # Definição dos trabalhos a serem executados
 
