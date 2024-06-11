@@ -4,9 +4,6 @@ on:
   push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
     paths:
       - 'github'  # Inclui a pasta github e todos os seus arquivos
-    paths-ignore:
-      - 'README.md'  # Ignora o arquivo README.md
-      - '.gitgnore'  # Ignora o arquivo .gitignore
 
 jobs:  # Definição dos trabalhos a serem executados
 
