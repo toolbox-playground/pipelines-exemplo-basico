@@ -3,7 +3,7 @@ name: Publish Docker image version
 on:
   push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
     paths:
-      - './challenges/github' # Inclui a pasta challenges/github e todos os seus arquivos
+      - './challenges/github/**' # Inclui a pasta challenges/github e todos os seus arquivos
 
 jobs:
 
