@@ -34,7 +34,7 @@ pipeline {
                 script { // Define the script to execute
                     // Build the Docker image
                     sh "cd jenkins"
-                    sh "docker build -f Dockerfile -t ${env.DOCKER_REPO}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG} ." // Execute the command to build the Docker image
+                    sh "docker build -t ${env.DOCKER_REPO}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG} ." // Execute the command to build the Docker image
                 }
             }
         }

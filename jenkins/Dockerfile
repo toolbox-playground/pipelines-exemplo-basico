@@ -8,7 +8,7 @@ RUN mkdir -p /home/node-app
 WORKDIR /home/node-app/
 
 # Copia todos os arquivos e diretórios do diretório atual (onde o Dockerfile está localizado) para o diretório /home/node-app/ dentro do container
-COPY /app .
+COPY ./app .
 
 # Executa o comando "npm install" para instalar as dependências especificadas no arquivo package.json.
 RUN npm install
