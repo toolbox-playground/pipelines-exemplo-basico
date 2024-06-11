@@ -39,7 +39,7 @@ As varáveis abaixo devem ser salvas como secrets no GitHub Actions
 
 1. DOCKER_NAMESPACE: Namespace do seu repositório
 2. DOCKER_PASSWORD: Access Tokens gerado no Docker Hub. Link de como fazer [Access Token](https://docs.docker.com/security/for-developers/access-tokens/)
-3. DOCKER_REGISTRY: https://docker.io/
+3. DOCKER_REGISTRY: docker.io
 4. DOCKER_REPOSITORY: Nome do seu repositório no Docker Hub
 5. DOCKER_USERNAME: Usuário do Docker Hub
 6. SERVICE_ACCOUNT: Conta de serviço do GCP utilizada pelo WIF
@@ -50,7 +50,7 @@ As varáveis abaixo devem ser salvas como secrets no GitHub Actions
 11. SONAR_TOKEN: Token de autenticação para o SonarCloud
 12. WORKLOAD_IDENTIFIER_PROVIDER: URL do Pool do Identificador de Carga de Trabalho
 
-E salvar DOCKER_REGISTRY: https://docker.io/ também como Repository Variables.
+E salvar DOCKER_REGISTRY: docker.io também como Repository Variables.
 
 ## Deploy na Cloud Run
 A Cloud Run é uma plataforma de execução de contêineres gerenciada pelo Google Cloud. Para realizar o deploy na Cloud Run, é necessário seguir os seguintes passos:
@@ -102,9 +102,9 @@ gcloud iam service-accounts add-iam-policy-binding github-actions@toolbox-sandbo
 ### Acesso para usuários não autenticados
 
 Após realizado o deploy:
-1. Ir até [Cloud Run](https://console.cloud.google.com/run?project=toolbox-sandbox-388523)
-2. Clicar na cloud run [nodejs-toolbox-playground](https://console.cloud.google.com/run/detail/us-central1/nodejs-toolbox-playground?project=toolbox-sandbox-388523)
-3. Clicar em [Segurança](https://console.cloud.google.com/run/detail/us-central1/nodejs-toolbox-playground/security?project=toolbox-sandbox-388523)
+1. Ir até [Cloud Run](https://console.cloud.google.com/run)
+2. Clicar na cloud run `nodejs-toolbox-playground`
+3. Clicar em `Segurança`
 4. Em Autenticação, marca `Allow unauthenticated invocations` para permitir acesso a Cloud Run.
 
 Uma recomendação do produto Cloud Run é que sistemas CI/CD não definam ou alterem as configurações para permitir invocações não autenticadas. Novas implantações são automaticamente serviços privados, enquanto a implantação de uma revisão de um serviço público (não autenticado) preservará a configuração IAM de público (não autenticado). Para mais informações, consulte [Controlando o acesso em um serviço individual](https://cloud.google.com/run/docs/securing/managing-access).
