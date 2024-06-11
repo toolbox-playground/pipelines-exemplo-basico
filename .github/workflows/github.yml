@@ -32,6 +32,6 @@ jobs:  # Definição dos trabalhos a serem executados
         with:
           node-version: '18.x' # Versão do Node.js a ser usada
       - name: Install dependencies # Nome do passo
-        run: cd cd github/app && npm install # Comando para instalar as dependências do projeto
+        run: cd github/app && npm install # Comando para instalar as dependências do projeto
       - name: Run tests # Nome do passo
-        run: cd cd github/app && npm test # Comando para executar os testes do projeto
+        run: cd github/app && npm test # Comando para executar os testes do projeto
