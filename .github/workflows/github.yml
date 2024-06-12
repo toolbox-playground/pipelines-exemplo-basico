@@ -2,6 +2,8 @@ name: GitHub Actions Nodejs Demo  # Nome do fluxo de trabalho
 
 on: 
   push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
+    branches:
+        - main
     paths:
       - './github/**'  # Inclui a pasta github e todos os seus arquivos
   workflow_dispatch: # Evento que aciona o fluxo de trabalho manualmente
