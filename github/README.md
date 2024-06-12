@@ -55,6 +55,6 @@ Essas são as explicações para cada linha do código YAML fornecido. Cada linh
 
 ## Arquivo yml
 
-O arquivo que faz a pipeline deste repositório é o [github.yml](./../.github/workflows/github.yml)
+O arquivo que faz a pipeline deste repositório é o [github.yml](./../.github/workflows/github.yml).
 
-O modelo dele é o [main.yml](./.github/workflows/main.yml)
+O modelo dele é o [main.yml](./.github/workflows/main.yml).
