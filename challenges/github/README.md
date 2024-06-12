@@ -33,24 +33,27 @@ O Snyk é uma ferramenta de segurança de código aberto que verifica as depend�
 3. Adicionar o token aos segredos do GitHub no repositório.
 4. Configurar o Snyk no fluxo de trabalho do GitHub Actions para verificar as dependências do projeto.
 
-## Action Secrets e Repository variables
+## Action Secrets
 
-As varáveis abaixo devem ser salvas como secrets no GitHub Actions
+As varáveis abaixo devem ser salvas como `Secrets` no GitHub Actions
 
-1. DOCKER_NAMESPACE: Namespace do seu repositório
+1. DOCKER_USERNAME: Usuário do Docker Hub
 2. DOCKER_PASSWORD: Access Tokens gerado no Docker Hub. Link de como fazer [Access Token](https://docs.docker.com/security/for-developers/access-tokens/)
-3. DOCKER_REGISTRY: docker.io
-4. DOCKER_REPOSITORY: Nome do seu repositório no Docker Hub
-5. DOCKER_USERNAME: Usuário do Docker Hub
-6. SERVICE_ACCOUNT: Conta de serviço do GCP utilizada pelo WIF
-7. SNYK_TOKEN: Token de autenticação do SNYK
-8. SONAR_ORG:  Nome da organização no SonarCloud
-9. SONAR_PROJECT_KEY: Chave do projeto no SonarCloud
-10. SONAR_PROJECT_NAME: Nome do projeto no SonarCloud
-11. SONAR_TOKEN: Token de autenticação para o SonarCloud
-12. WORKLOAD_IDENTIFIER_PROVIDER: URL do Pool do Identificador de Carga de Trabalho
+3. SNYK_TOKEN: Token de autenticação do SNYK
+4. SONAR_ORG:  Nome da organização no SonarCloud
+5. SONAR_TOKEN: Token de autenticação para o SonarCloud
+6. SONAR_PROJECT_KEY: Chave do projeto no SonarCloud
+7. SONAR_PROJECT_NAME: Nome do projeto no SonarCloud
+8. WORKLOAD_IDENTIFIER_PROVIDER: URL do Pool do Identificador de Carga de Trabalho
+9. SERVICE_ACCOUNT: Conta de serviço do GCP utilizada pelo WIF
 
-E salvar DOCKER_REGISTRY: docker.io também como Repository Variables.
+## Repository variables
+
+As varáveis abaixo devem ser salvas como `Repository Variables` no GitHub Actions
+
+1. DOCKER_REGISTRY: docker.io
+2. DOCKER_NAMESPACE: Nome da Organização ou de usuário.
+3. DOCKER_REPOSITORY: Nome do seu repositório no Docker Hub
 
 ## Deploy na Cloud Run
 A Cloud Run é uma plataforma de execução de contêineres gerenciada pelo Google Cloud. Para realizar o deploy na Cloud Run, é necessário seguir os seguintes passos:
