@@ -62,7 +62,7 @@ jobs:
         id: meta # Define um ID para o passo
         uses: docker/metadata-action@v5 # Usa a ação de metadados do Docker
         with: # Define os parâmetros da ação
-          images: "${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}"  # Define as imagens Docker a serem processadas
+          images: "${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}"  # Define as imagens Docker a serem processadas
           tags: | 
             type=raw,value=latest
             type=raw,value=${{ github.run_number }}
