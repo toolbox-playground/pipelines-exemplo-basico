@@ -5,7 +5,7 @@ on:
     branches:
         - main
     paths:
-      - './challenges/github/**' # Inclui a pasta challenges/github e todos os seus arquivos
+      - 'challenges/github/**' # Inclui a pasta challenges/github e todos os seus arquivos
   workflow_dispatch: # Evento que aciona o fluxo de trabalho manualmente
     inputs: # Define os inputs do fluxo de trabalho
       name: # Define o input "name"
