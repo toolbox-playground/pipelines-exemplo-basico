@@ -15,6 +15,12 @@ O GitHub Actions é uma plataforma de automação que permite criar fluxos de tr
 4. **Snyk**: Além disso, o Snyk é utilizado para verificar a segurança das dependências do projeto e identificar possíveis vulnerabilidades.
 5. **Deploy na Cloud Run**: Por fim, o fluxo de trabalho realiza o deploy do projeto na Cloud Run, uma plataforma de execução de contêineres gerenciada pelo Google Cloud.
 
+## Arquivo yml
+
+O arquivo que faz a pipeline deste repositório é o [github-challenge.yml](./../../.github/workflows/github-challenge.yml)
+
+O modelo dele é o [main.yml](./.github/workflows/main.yml)
+
 ## SonarCloud
 O SonarCloud é uma plataforma de análise estática de código que fornece informações detalhadas sobre a qualidade do código, vulnerabilidades, bugs, code smells, cobertura de testes, entre outros. Para utilizar o SonarCloud, é necessário seguir os seguintes passos:
 
