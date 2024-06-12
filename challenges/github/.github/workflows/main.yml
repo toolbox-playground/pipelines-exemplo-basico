@@ -99,8 +99,8 @@ jobs:
           image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest" # Define a imagem a ser usada no Cloud Run
           # image: docker.io/toolboxplayground/pipelines-exemplo-basico-desafio:latest # Define a imagem a ser usada no Cloud Run
         
-      - name: 'Use output' # Usa a saída do passo anterior
-        run: 'curl "${{ steps.deploy.outputs.url }}"' # Usa a URL do serviço no Cloud Run
+      - name: 'Access Cloud Run' # Usa o CLI do Google Cloud"
+        run: "curl -H 'Authorization: Bearer $(gcloud auth print-identity-token)' ${{ steps.deploy.outputs.url }}" # Usa o token de identidade do Google Cloud
         continue-on-error: true # Continua a execução mesmo se houver erro
 
   docker_test: # Nome do trabalho
