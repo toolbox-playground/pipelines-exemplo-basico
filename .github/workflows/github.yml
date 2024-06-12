@@ -5,7 +5,7 @@ on:
     branches:
         - main
     paths:
-      - './github/**'  # Inclui a pasta github e todos os seus arquivos
+      - 'github/**'  # Inclui a pasta github e todos os seus arquivos
   workflow_dispatch: # Evento que aciona o fluxo de trabalho manualmente
     inputs: # Define os inputs do fluxo de trabalho
       name: # Define o input "name"
