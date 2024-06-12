@@ -128,7 +128,7 @@ jobs:
       run: sleep 10 # Espera 10 segundos
 
     - name: Check if container is running # Verifica se o container está rodando
-      run: docker ps -f "name='nodejs'" # Checa se o container está rodando
+      run: docker ps -f 'name=nodejs' # Checa se o container está rodando
 
     - name: Access Container
       run: curl -s http://localhost:8080
