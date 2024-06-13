@@ -84,25 +84,7 @@ jobs:
           subject-name: ${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
           subject-digest: ${{ steps.push.outputs.digest }}  # Define o digest do assunto da atestação
           push-to-registry: true  # Define se a atestação deve ser enviada para o registro      
-      
-        
-      - name: Deploy on Cloud Run # Faz o deploy da aplicação no Cloud Run
-        uses: 'google-github-actions/auth@v2' # Usa a ação de autenticação do Google Cloud
-        with: # Define os parâmetros da ação
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTIFIER_PROVIDER }} # Define o provedor de identidade do workload
-          service_account: ${{ secrets.SERVICE_ACCOUNT }} # Define a conta de serviço
-        
-      - id: 'deploy' # Define um ID para o passo
-        uses: 'google-github-actions/deploy-cloudrun@v2' # Usa a ação de deploy no Cloud Run
-        with: # Define os parâmetros da ação
-          service: 'nodejs-toolbox-playground-exemplo' # Define o nome do serviço no Cloud Run
-          image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest" # Define a imagem a ser usada no Cloud Run
-          flags: '--allow-unauthenticated' # Define as flags para o deploy no Cloud Run que libera o acesso para usuários não autenticados
-
-      - name: 'Access Cloud Run' # Usa o CLI do Google Cloud
-        run: "curl -s ${{ steps.deploy.outputs.url }}" # Acessa o Cloud Run
-        continue-on-error: true # Continua a execução mesmo se houver erro
-
+            
   docker_test: # Nome do trabalho
     name: Run Docker Container # Nome do trabalho
     runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
@@ -136,6 +118,28 @@ jobs:
 
     - name: Stop and Remove Docker Container # Para e remove o container Docker
       run: docker rm -f nodejs # Para e remove o container Docker
+
+  cloud_run:
+    name: Deploy on CLoud Run # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    needs: docker_test # Define que o trabalho depende do trabalho "push_to_registry"
+    steps:
+      - name: Login GCP # Faz o deploy da aplicação no Cloud Run
+        uses: 'google-github-actions/auth@v2' # Usa a ação de autenticação do Google Cloud
+        with: # Define os parâmetros da ação
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTIFIER_PROVIDER }} # Define o provedor de identidade do workload
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # Define a conta de serviço
+        
+      - id: 'deploy' # Define um ID para o passo
+        uses: 'google-github-actions/deploy-cloudrun@v2' # Usa a ação de deploy no Cloud Run
+        with: # Define os parâmetros da ação
+          service: 'nodejs-toolbox-playground-exemplo' # Define o nome do serviço no Cloud Run
+          image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest" # Define a imagem a ser usada no Cloud Run
+          flags: '--allow-unauthenticated' # Define as flags para o deploy no Cloud Run que libera o acesso para usuários não autenticados
+
+      - name: 'Access Cloud Run' # Usa o CLI do Google Cloud
+        run: "curl -s ${{ steps.deploy.outputs.url }}" # Acessa o Cloud Run
+        continue-on-error: true # Continua a execução mesmo se houver erro
 
   sonarcloud: # Nome do trabalho
     name: SonarCloud Scan # Nome do trabalho
