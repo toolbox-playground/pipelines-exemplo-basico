@@ -100,7 +100,8 @@ jobs:
           service: 'nodejs-toolbox-playground-exemplo' # Define o nome do serviço no Cloud Run
           image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest" # Define a imagem a ser usada no Cloud Run
           # image: docker.io/toolboxplayground/pipelines-exemplo-basico-desafio:latest # Define a imagem a ser usada no Cloud Run
-        
+          flags: '--allow-unauthenticated'
+
       - name: 'Access Cloud Run' # Usa o CLI do Google Cloud
         run: "curl -H 'Authorization: Bearer $(gcloud auth print-identity-token)' ${{ steps.deploy.outputs.url }}" # Usa o token de identidade do Google Cloud
         continue-on-error: true # Continua a execução mesmo se houver erro
