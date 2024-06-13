@@ -89,6 +89,11 @@ Para configurar uma Multibranch Pipeline no Jenkins e definir segredos para o us
 
 16. Clique em "Salvar" para salvar as configurações do projeto.
 
+17. No arquivo [Jenkinsfile](./Jenkinsfile) coloque os valores corretos da seguinte variráveis:
+- DOCKER_NAMESPACE: Nome da Organização ou de usuário.
+- DOCKER_REPOSITORY: Nome do repositório
+- DOCKER_TAG: Nome da tag, normalmente é `latest`.
+
 Agora você configurou uma Multibranch Pipeline no Jenkins e definiu segredos para o usuário e senha do Docker e do GitHub. 
 
 Na tela que irá aparecer, clique em `main` e depois em `Construir agora` e irá disparar a pipeline.

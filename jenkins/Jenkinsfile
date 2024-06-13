@@ -2,8 +2,8 @@ pipeline {
     agent none
     environment {
         // Define environment variables
-        DOCKER_REPO = 'toolboxplayground'
-        DOCKER_IMAGE_NAME = 'nodejs-jenkins'
+        DOCKER_NAMESPACE = 'toolboxplayground'
+        DOCKER_REPOSITORY = 'nodejs-jenkins'
         DOCKER_TAG = 'latest'
         DOCKER_CREDS = credentials('toolboxdocker')
     }
@@ -33,7 +33,7 @@ pipeline {
             steps { // Define the steps of the stage Build Docker Image
                 script { // Define the script to execute
                     // Build the Docker image
-                    sh "cd jenkins && docker build -t ${env.DOCKER_REPO}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG} ." // Execute the command to build the Docker image
+                    sh "cd jenkins && docker build -t ${env.DOCKER_NAMESPACE}/${env.DOCKER_REPOSITORY}:${env.DOCKER_TAG} ." // Execute the command to build the Docker image
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
                 script { // Define the script to execute
                     // Log in to Docker Hub and push the Docker image
                     sh 'echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin' // Execute the command to log in to Docker Hub
-                    sh "docker push ${env.DOCKER_REPO}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG}" // Execute the command to push the Docker image
+                    sh "docker push ${env.DOCKER_NAMESPACE}/${env.DOCKER_REPOSITORY}:${env.DOCKER_TAG}" // Execute the command to push the Docker image
                     sh "docker logout" // Execute the command to log out from Docker Hub
                 }
             }
@@ -54,9 +54,9 @@ pipeline {
                 script { // Define the script to execute
                     // Log in to Docker Hub and push the Docker image
                     sh 'echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin' // Execute the command to log in to Docker Hub
-                    sh "docker pull ${env.DOCKER_REPO}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG}" // Execute the command to pull the Docker image
+                    sh "docker pull ${env.DOCKER_NAMESPACE}/${env.DOCKER_REPOSITORY}:${env.DOCKER_TAG}" // Execute the command to pull the Docker image
                     // Select a port to test the application that is not the same as the one used by Jenkins and not the same as the one used by others applications
-                    sh "docker run -d -p 8081:8080 --name jenkins-test --rm ${env.DOCKER_REPO}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG}" // Execute the command to run the Docker image
+                    sh "docker run -d -p 8081:8080 --name jenkins-test --rm ${env.DOCKER_NAMESPACE}/${env.DOCKER_REPOSITORY}:${env.DOCKER_TAG}" // Execute the command to run the Docker image
                     sh "sleep 10" // Execute the command to wait for the application to start
                     sh "docker ps -f 'name=jenkins-test'" // Execute the command to check if the Docker container is running
                     sh "docker stop jenkins-test" // Execute the command to stop the Docker container
