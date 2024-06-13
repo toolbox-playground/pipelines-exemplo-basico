@@ -65,7 +65,7 @@ Para configurar uma Multibranch Pipeline no Jenkins e definir segredos para o us
 
 - Em `Kind` selecione `Username with password` e prencha o `Username` com o seu usário GitHub e `Password` com sua senha. Você também pode colocar um token de acesso pessoal, leia sobre em [token de acesso pessoal](https://docs.github.com/pt/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 
-- Preencha o ID com a designação que deseja dar a credencial.
+- Preencha o ID com a designação que deseja dar a credencial, neste exemplo foi escrito `toolboxgithub`.
 
 - Clique em `Create`
 
@@ -83,7 +83,7 @@ Para configurar uma Multibranch Pipeline no Jenkins e definir segredos para o us
 
 - Em `Kind` selecione `Username with password` e prencha o `Username` com o seu usário Docker e `Password` com seu token[Access Token](https://docs.docker.com/security/for-developers/access-tokens/).
 
-- Preencha o ID com a designação que deseja dar a credencial, neste exemplo foi escrito `marcelobuzzettitoolboxdocker`.
+- Preencha o ID com a designação que deseja dar a credencial, neste exemplo foi escrito `toolboxdocker`.
 
 - Clique em `Create`
 

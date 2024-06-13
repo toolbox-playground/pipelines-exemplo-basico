@@ -5,7 +5,7 @@ pipeline {
         DOCKER_REPO = 'toolboxplayground'
         DOCKER_IMAGE_NAME = 'nodejs-jenkins'
         DOCKER_TAG = 'latest'
-        DOCKER_CREDS = credentials('marcelobuzzettitoolboxdocker')
+        DOCKER_CREDS = credentials('toolboxdocker')
     }
     stages { // Define the stages of the pipeline
         stage('Install') { // Define the stage Install
