@@ -59,7 +59,7 @@ pipeline {
                     sh "docker run -d -p 8081:8080 --name jenkins-test --rm ${env.DOCKER_NAMESPACE}/${env.DOCKER_REPOSITORY}:${env.DOCKER_TAG}" // Execute the command to run the Docker image
                     sh "sleep 10" // Execute the command to wait for the application to start
                     sh "docker ps -f 'name=jenkins-test'" // Execute the command to check if the Docker container is running
-                    sh "curl -s http://localhost:8081" // Execute the command to test the application
+                    sh "curl -X GET http://localhost:8081" // Execute the command to test the application
                     sh "docker stop jenkins-test" // Execute the command to stop the Docker container
                     sh "docker logout" // Execute the command to log out from Docker Hub
                 }
