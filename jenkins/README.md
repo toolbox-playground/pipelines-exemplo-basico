@@ -22,7 +22,7 @@ Neste repositório será utlizado a imagem docker do jenkins (jenkins/jenkins:lt
 
 3. Construa a imagem Docker:
     ```bash
-    docker build -t jenkins:local .
+    docker build -t jenkins:local -f DockerfileJenkins
     ```
     Obs.: Certifique-se que seu Docker está rodando.
 
@@ -41,6 +41,54 @@ Foi utlizado o [How to automate jenkins setup with docker and jenkins configurat
 
 Para saber mais sobre o arquivo [casc.yaml](casc.yaml]), após subir o jenkins, acesse [http://localhost:8080/manage/configuration-as-code/reference](http://localhost:8080/manage/configuration-as-code/reference)
 
-## Blue Ocean
+## Uso
 
-[https://www.jenkins.io/doc/book/blueocean/](https://www.jenkins.io/doc/book/blueocean/)
+### Configurando uma Multibranch Pipeline
+
+Para configurar uma Multibranch Pipeline no Jenkins e definir segredos para o usuário e senha do Docker e do GitHub, siga os passos abaixo:
+
+1. Acesse o Jenkins em seu navegador, digitando o endereço `http://localhost:8080`.
+
+2. Faça login com suas credenciais de administrador informado no `docker run`. No modelo acima são `admin` e `password`.
+
+3. No painel de controle do Jenkins, clique em "Novo Tarefa" para criar um novo projeto.
+
+4. Na página de criação do projeto, digite um nome para o projeto, neste exemplo foi utilizado `Pipeline Jenkins`, e selecione "Multibranch Pipeline" como o tipo de projeto.
+
+5. Clique em "OK" para confirmar a criação do projeto.
+
+6. Na página de configuração do projeto, vá até a seção "Branch Sources"e:
+
+- Adicione as credenciais do GitHub clicando em `+Add` e selecionando `Pipeline Juenkins`.
+
+- Na nova janela, em `Domain` selecione `Global credentials (unrestricted)`.
+
+- Em `Kind` selecione `Username with password` e prencha o `Username` com o seu usário GitHub e `Password` com sua senha. Você também pode colocar um token de acesso pessoal, leia sobre em [token de acesso pessoal](https://docs.github.com/pt/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+
+- Preencha o ID com a designação que deseja dar a credencial.
+
+- Clique em `Create`
+
+7 `Repository HTTPS URL`: coloque o enredeço do respositório. Neste exemplo é o `https://github.com/toolbox-playground/pipelines-exemplo-basico`.
+
+8. Na seção "Build Configuration", by Jenkinsfile e no Script Path escreva `jenkins/Jenkinsfile`
+
+9. Clique em salvar.
+
+10. Clique em `Credentials`:
+
+- Em `Stores scoped to Pipeline Jenkins`, clique `Pipeline Jenkins`.
+
+- Na nova janela, em `Domain` selecione `Global credentials (unrestricted)`.
+
+- Em `Kind` selecione `Username with password` e prencha o `Username` com o seu usário Docker e `Password` com seu token[Access Token](https://docs.docker.com/security/for-developers/access-tokens/).
+
+- Preencha o ID com a designação que deseja dar a credencial, neste exemplo foi escrito `marcelobuzzettitoolboxdocker`.
+
+- Clique em `Create`
+
+16. Clique em "Salvar" para salvar as configurações do projeto.
+
+Agora você configurou uma Multibranch Pipeline no Jenkins e definiu segredos para o usuário e senha do Docker e do GitHub. 
+
+Na tela que irá aparecer, clique em `main` e depois em `Construir agora` e irá disparar a pipeline.
