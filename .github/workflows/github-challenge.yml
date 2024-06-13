@@ -143,7 +143,7 @@ jobs:
       - id: 'deploy' # Define um ID para o passo
         uses: 'google-github-actions/deploy-cloudrun@v2' # Usa a ação de deploy no Cloud Run
         with: # Define os parâmetros da ação
-          service: 'nodejs-toolbox-playground-exemplo' # Define o nome do serviço no Cloud Run
+          service: ${{ vars.CLOUD_RUN_SERVICE_NAME }} # Define o nome do serviço no Cloud Run
           image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest" # Define a imagem a ser usada no Cloud Run
           flags: '--allow-unauthenticated' # Define as flags para o deploy no Cloud Run que libera o acesso para usuários não autenticados
 
