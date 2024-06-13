@@ -11,9 +11,11 @@ O GitHub Actions é uma plataforma de automação que permite criar fluxos de tr
 
 1. **Build**: O fluxo de trabalho inicia com a compilação do código-fonte do projeto.
 2. **Testes**: Em seguida, são executados os testes automatizados para garantir a qualidade do código.
-3. **SonarCloud**: Após os testes, o código é analisado pelo SonarCloud para identificar possíveis problemas de qualidade, vulnerabilidades e bugs.
-4. **Snyk**: Além disso, o Snyk é utilizado para verificar a segurança das dependências do projeto e identificar possíveis vulnerabilidades.
+3. **Build e Push da imagem Docker para o Docker Hub**: Realiza o build da imagem docker e envia para o Docker Hub
+4. **Run Docker Container**: Faz o pull da image Docker criada e realiza testes.
 5. **Deploy na Cloud Run**: Por fim, o fluxo de trabalho realiza o deploy do projeto na Cloud Run, uma plataforma de execução de contêineres gerenciada pelo Google Cloud.
+6. **SonarCloud**: Após os testes, o código é analisado pelo SonarCloud para identificar possíveis problemas de qualidade, vulnerabilidades e bugs.
+7. **Snyk**: Além disso, o Snyk é utilizado para verificar a segurança das dependências do projeto e identificar possíveis vulnerabilidades.
 
 ## Arquivo yml
 
