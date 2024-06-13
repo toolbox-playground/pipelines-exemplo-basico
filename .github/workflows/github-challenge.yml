@@ -122,10 +122,13 @@ jobs:
       run: docker rm -f nodejs # Para e remove o container Docker
 
   cloud_run:
-    name: Deploy on CLoud Run # Nome do trabalho
+    name: Deploy on Cloud Run # Nome do trabalho
     runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
     needs: docker_test # Define que o trabalho depende do trabalho "push_to_registry"
     steps:
+      - name: Check out the repo  # Faz o checkout do repositório
+        uses: actions/checkout@v4 # Usa a ação de checkout do repositório
+        
       - name: Login GCP # Faz o deploy da aplicação no Cloud Run
         uses: 'google-github-actions/auth@v2' # Usa a ação de autenticação do Google Cloud
         with: # Define os parâmetros da ação
