@@ -62,9 +62,10 @@ As varáveis abaixo devem ser salvas como `Repository Variables` no GitHub Actio
 3. DOCKER_REPOSITORY: Nome do seu repositório no Docker Hub
 
 ## Deploy na Cloud Run
+
 A Cloud Run é uma plataforma de execução de contêineres gerenciada pelo Google Cloud. Para realizar o deploy na Cloud Run, é necessário seguir os seguintes passos:
 
-1. Criar um Workload Identifier Federation para autenticar as ações do GitHub.
+1. Criar um Workload Identifier Federation (WIF) para autenticar as ações do GitHub.
 2. Configurar o Workload Identifier Federation no projeto do Google Cloud.
 3. Adicionar o Workload Identifier Provider e o Service Account aos segredos do GitHub no repositório.
 4. Utilizar a ação do GitHub Marketplace Action [Deploy Cloud Run](https://github.com/marketplace/actions/deploy-to-cloud-run) para realizar o deploy na Cloud Run.
@@ -72,6 +73,29 @@ A Cloud Run é uma plataforma de execução de contêineres gerenciada pelo Goog
 
 Após realizar o deploy, é possível acessar a Cloud Run para verificar o serviço e configurar a autenticação, se necessário.
 
+A conta ou chave de serviço utilizada na criação do WIF deverá ter as seguintes permissões necessárias para a criação do Cloud Run:
+
+1. Cloud Run:
+- roles/run.admin
+- roles/iam.serviceAccountUser     (para atuar como a conta de serviço em tempo de execução do Cloud Run)
+
+2. Cloud Storage:
+- roles/storage.admin   (se estiver usando o Google Container Registry (gcr) em vez disso)
+
+3. Artifact Registry
+- roles/artifactregistry.admin     (nível de projeto ou repositório)
+
+Fonte: [google-github-action](https://github.com/google-github-actions/example-workflows/blob/main/workflows/deploy-cloudrun/cloudrun-docker.yml)
+
+ ### Leituras indicadas
+ 
+[Cloud Run IAM permissions](https://cloud.google.com/run/docs/deploying)
+
+[Artifact Registry IAM permissions](https://cloud.google.com/artifact-registry/docs/access-control#roles)
+
+[Container Registry vs Artifact Registry](https://cloud.google.com/blog/products/application-development/understanding-artifact-registry-vs-container-registry)
+
+[Principle of least privilege](https://cloud.google.com/blog/products/identity-security/dont-get-pwned-practicing-the-principle-of-least-privilege)
 
 ## Federação de Identificador de Carga de Trabalho (WIF Workload Identity Federation)
 
