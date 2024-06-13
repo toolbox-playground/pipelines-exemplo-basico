@@ -103,7 +103,7 @@ jobs:
           flags: '--allow-unauthenticated'
 
       - name: 'Access Cloud Run' # Usa o CLI do Google Cloud
-        run: "curl -H 'Authorization: Bearer $(gcloud auth print-identity-token)' ${{ steps.deploy.outputs.url }}" # Usa o token de identidade do Google Cloud
+        run: "curl -s ${{ steps.deploy.outputs.url }}" # Usa o token de identidade do Google Cloud
         continue-on-error: true # Continua a execução mesmo se houver erro
 
   docker_test: # Nome do trabalho
