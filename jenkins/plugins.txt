@@ -7,7 +7,7 @@ cloudbees-folder:latest
 configuration-as-code:latest
 credentials-binding:latest
 docker-plugin:latest
-docker-workflow:
+docker-workflow:latest
 email-ext:latest
 gcloud-sdk:latest
 git:latest
