@@ -1,0 +1,123 @@
+name: Publish Jenkins
+
+on:
+  push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
+    branches:
+        - main
+    paths:
+      - 'jenkins/**' # Inclui a pasta challenges/github e todos os seus arquivos
+  workflow_dispatch: # Evento que aciona o fluxo de trabalho manualmente
+    inputs: # Define os inputs do fluxo de trabalho
+      name: # Define o input "name"
+        description: 'Trigger manual do Workflow' # Descrição do input
+
+jobs:
+
+  push_to_registry:
+    name: Build and Push Docker image to Docker Hub and Deploy on Cloud Run
+    runs-on: ubuntu-latest  # Define o sistema operacional em que o fluxo de trabalho será executado
+    permissions: # Define as permissões necessárias para o trabalho
+      packages: write # Define as permissões de escrita para pacotes
+      contents: read # Define as permissões de leitura para conteúdos
+      id-token: write # Define as permissões de escrita para tokens de ID
+      attestations: write # Define as permissões de escrita para atestações
+    steps: # Define os passos a serem executados no trabalho
+      - name: Check out the repo  # Faz o checkout do repositório
+        uses: actions/checkout@v4 # Usa a ação de checkout do repositório
+
+      - name: Log in to Docker Hub  # Faz login no Docker Hub
+        uses: docker/login-action@v3 # Usa a ação de login no Docker Hub
+        with: # Define os parâmetros da ação
+          username: ${{ secrets.DOCKER_USERNAME }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para username
+          password: ${{ secrets.DOCKER_PASSWORD }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para password
+
+      - name: Extract metadata (tags, labels) for Docker  # Extrai metadados (tags, labels) para o Docker
+        id: meta # Define um ID para o passo
+        uses: docker/metadata-action@v5 # Usa a ação de metadados do Docker
+        with: # Define os parâmetros da ação
+          images: "${{ vars.DOCKER_NAMESPACE }}/jenkins"  # Define as imagens Docker a serem processadas
+          tags: | 
+            type=raw,value=latest
+            type=raw,value=${{ github.run_number }}
+            type=ref,event=tag
+
+      - name: Build and push Docker image  # Constrói e envia a imagem Docker para o Docker Hub
+        id: push # Define um ID para o passo
+        uses: docker/build-push-action@v5 # Usa a ação de construção e envio de imagem do Docker
+        with: # Define os parâmetros da ação
+          context: ./jenkins  # Define o contexto do build, neste caso, o diretório atual
+          # file: ./DockerfileJenkins # Especifica o arquivo Dockerfile a ser usado
+          push: true  # Define se a imagem deve ser enviada para o Docker Hub
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}  # Define as labels da imagem com base nos metadados extraídos
+
+      - name: Generate artifact attestation  # Gera uma atestação de artefato
+        uses: actions/attest-build-provenance@v1 # Usa a ação de atestação de proveniência de build
+        with: # Define os parâmetros da ação
+          subject-name: ${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/jenkins  # Define o nome do assunto da atestação
+          subject-digest: ${{ steps.push.outputs.digest }}  # Define o digest do assunto da atestação
+          push-to-registry: true  # Define se a atestação deve ser enviada para o registro      
+
+  docker_test: # Nome do trabalho
+    name: Run Docker Container # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    needs: push_to_registry # Define que o trabalho depende do trabalho "push_to_registry"
+
+    steps: # Passos a serem executados no trabalho
+      
+    - name: Checkout repository # Faz o checkout do repositório
+      uses: actions/checkout@v2 # Usa a ação de checkout do repositório
+
+    - name: Log in to Docker Hub  # Faz login no Docker Hub
+      uses: docker/login-action@v3 # Usa a ação de login no Docker Hub
+      with: # Define os parâmetros da ação
+        username: ${{ secrets.DOCKER_USERNAME }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para username
+        password: ${{ secrets.DOCKER_PASSWORD }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para password
+
+    - name: Pull Docker Image # Faz o pull da imagem Docker
+      run: docker pull ${{ vars.DOCKER_NAMESPACE }}/jenkins:latest # Usa as credenciais do Docker Hub armazenadas como secretos no repositório
+
+    - name: Run Docker Container # Executa o container Docker
+      run: docker run -d --name jenkins -p 8080:8080 -p 50000:50000 ${{ vars.DOCKER_NAMESPACE }}/jenkins # Usa as credenciais do Docker Hub armazenadas como secretos no repositório
+
+    - name: Wait for Container to be ready # Espera o container estar pronto
+      run: sleep 10 # Espera 10 segundos
+
+    - name: Check if container is running # Verifica se o container está rodando
+      run: docker ps -f 'name=jenkins' # Checa se o container está rodando
+
+    - name: Access Container
+      run: curl -s http://localhost:8080
+
+    - name: Stop and Remove Docker Container # Para e remove o container Docker
+      run: docker rm -f jenkins # Para e remove o container Docker
+
+  cloud_run:
+    name: Deploy on Cloud Run # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    needs: docker_test # Define que o trabalho depende do trabalho "docker_test"
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+
+      - name: Checkout repository # Faz o checkout do repositório
+        uses: actions/checkout@v2 # Usa a ação de checkout do repositório
+
+      - name: Deploy on Cloud Run # Faz o deploy da aplicação no Cloud Run
+        uses: 'google-github-actions/auth@v2' # Usa a ação de autenticação do Google Cloud
+        with: # Define os parâmetros da ação
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTIFIER_PROVIDER }} # Define o provedor de identidade do workload
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # Define a conta de serviço
+        
+      - id: 'deploy' # Define um ID para o passo
+        uses: 'google-github-actions/deploy-cloudrun@v2' # Usa a ação de deploy no Cloud Run
+        with: # Define os parâmetros da ação
+          service: jenkins # Define o nome do serviço no Cloud Run
+          image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/jenkins:latest" # Define a imagem a ser usada no Cloud Run
+          flags: '--allow-unauthenticated' # Define as flags para o deploy no Cloud Run que libera o acesso para usuários não autenticados
+
+      - name: 'Access Cloud Run' # Usa o CLI do Google Cloud
+        run: "curl -s ${{ steps.deploy.outputs.url }}" # Acessa o Cloud Run
+        continue-on-error: true # Continua a execução mesmo se houver erro
