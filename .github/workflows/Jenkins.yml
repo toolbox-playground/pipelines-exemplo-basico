@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v5 # Usa a ação de construção e envio de imagem do Docker
         with: # Define os parâmetros da ação
           context: ./jenkins  # Define o contexto do build, neste caso, o diretório atual
-          file: DockerfileJenkins # Especifica o arquivo Dockerfile a ser usado
+          file: ./jenkins/DockerfileJenkins # Especifica o arquivo Dockerfile a ser usado
           push: true  # Define se a imagem deve ser enviada para o Docker Hub
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}  # Define as labels da imagem com base nos metadados extraídos
