@@ -1,1 +1,2 @@
-app/node_modules
+nodejs/node_modules
+dotnet/obj/Debug
