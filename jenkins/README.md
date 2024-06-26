@@ -28,7 +28,7 @@ Depois de ter feito o fork, você pode clonar o repositório para a sua máquina
 
 1. Certifique-se de ter o Docker instalado em sua máquina. Você pode baixar e instalar o Docker a partir do site oficial: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).
 
-2. Crie uma conta no [Docker Hub](https://hub.docker.com/).
+2. Crie uma conta no [Docker Hub](https://hub.docker.com/) e crie um repositório.
 
 3. Certifique-se que você está dentro do diretório `jenkins-pipeline`.
 
