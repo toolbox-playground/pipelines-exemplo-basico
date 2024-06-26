@@ -28,23 +28,25 @@ Depois de ter feito o fork, você pode clonar o repositório para a sua máquina
 
 1. Certifique-se de ter o Docker instalado em sua máquina. Você pode baixar e instalar o Docker a partir do site oficial: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).
 
-2. Certifique-se que você está dentro do diretório `exemplos-pipelines/jenkins`.
+2. Crie uma conta no [Docker Hub](https://hub.docker.com/).
 
-3. Construa a imagem Docker:
+3. Certifique-se que você está dentro do diretório `jenkins-pipeline`.
+
+4. Construa a imagem Docker:
     ```bash
     docker build -t jenkins:local -f DockerfileJenkins
     ```
     Obs.: Certifique-se que seu Docker está rodando.
 
-4. Execute o contêiner Docker:
+5. Execute o contêiner Docker:
     ```bash
     docker run --name jenkins --rm -p 8080:8080 -p 50000:50000 --volume jenkins-data:/var/jenkins_home --volume /var/run/docker.sock:/var/run/docker.sock --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:local
     ```
     Essa configuração é usada quando para permitir que o contêiner Docker acesse o daemon do Docker no host, permitindo que ele execute operações relacionadas ao Docker, como criar, iniciar ou parar outros contêineres.
 
-5. Abra seu navegador e visite `http://localhost:8080` para ver a página inicial do Jenkins.
+6. Abra seu navegador e visite `http://localhost:8080` para ver a página inicial do Jenkins.
 
-6. Será solicitado o usuário e senha, que foram definidos no docker run, --env JENKINS_ADMIN_ID=`admin` --env JENKINS_ADMIN_PASSWORD=`password`
+7. Será solicitado o usuário e senha, que foram definidos no docker run, --env JENKINS_ADMIN_ID=`admin` --env JENKINS_ADMIN_PASSWORD=`password`
 
 ## Arquivo de configuração do Jenkins
 
