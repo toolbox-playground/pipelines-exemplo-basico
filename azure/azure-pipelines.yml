@@ -11,46 +11,11 @@ variables: # Define as variáveis do pipeline
 - group: toolboxGCP
 
 stages: # Define os estágios do pipeline
-- stage: build_test_push # Define o nome do estágio
+- stage: build_and_push # Define o nome do estágio
   jobs: # Define os jobs do estágio
-  - job: build # Define o nome do job
-    displayName: 'Build Node.js' # Define o nome que será exibido no Azure DevOps
-    pool: # Define a imagem do agente que será utilizada
-      vmImage: 'ubuntu-latest' # Define a imagem do agente como Ubuntu
-    steps: # Define os passos do job
-    - checkout: self # Realiza o checkout do repositório
-    - task: NodeTool@0 # Instala o Node.js
-      inputs: # Define os inputs do Node.js
-        versionSpec: '18.x' # Define a versão do Node.js
-      displayName: 'Install Node.js' # Define o nome que será exibido no Azure DevOps
-    - script: | # Executa um script que navega até o diretório app e instala as dependências do Node.js
-        cd app
-        npm install
-      displayName: 'Install dependencies' # Define o nome que será exibido no Azure DevOps
-
-  - job: test # Define o nome do job
-    displayName: 'Test Node.js' # Define o nome que será exibido no Azure DevOps
-    dependsOn: build # Define que o job depende do job build
-    pool: # Define a imagem do agente que será utilizada
-      vmImage: 'ubuntu-latest' # Define a imagem do agente como Ubuntu
-    steps: # Define os passos do job
-    - checkout: self # Realiza o checkout do repositório
-    - task: NodeTool@0 # Instala o Node.js
-      inputs: # Define os inputs do Node.js
-        versionSpec: '18.x' # Define a versão do Node.js
-      displayName: 'Install Node.js' # Define o nome que será exibido no Azure DevOps
-    - script: | # Executa um script que navega até o diretório app e instala as dependências do Node.js
-        cd app
-        npm install
-      displayName: 'Test App' # Define o nome que será exibido no Azure DevOps
-    - script: | # Executa um script que navega até o diretório app e executa os testes
-        cd app
-        npm test
-      displayName: 'Run tests' # Define o nome que será exibido no Azure DevOps
-
   - job: push_to_registry # Define o nome do job
     displayName: 'Build and Push Docker image to Docker Hub' # Define o nome que será exibido no Azure DevOps
-    dependsOn: test # Define que o job depende do job test
+    # dependsOn: test # Define que o job depende do job test
     pool: # Define a imagem do agente que será utilizada
       vmImage: 'ubuntu-latest' # Define a imagem do agente como Ubuntu
     steps: # Define os passos do job
@@ -60,7 +25,7 @@ stages: # Define os estágios do pipeline
         inputs: # Define os inputs da tarefa Docker
           command: build # Define o comando da tarefa Docker como build
           repository: $(docker_namespace)/$(docker_repository) # Substitua com o nome do seu repositório no Docker Hub
-          Dockerfile: '**/Dockerfile' # Define o Dockerfile
+          Dockerfile: '**/dotnet/Dockerfile' # Define o Dockerfile
           tags: '$(Build.BuildId),latest' # Define as tags da imagem Docker
       - task: Docker@2 # Define a tarefa Docker
         displayName: 'Login to Docker Hub' # Define o nome que será exibido no Azure DevOps
@@ -99,7 +64,7 @@ stages: # Define os estágios do pipeline
       displayName: 'Authenticate with Google Cloud' # Define o nome que será exibido no Azure DevOps
 
     - script: | # Executa um script que faz o deploy da imagem Docker para o Cloud Run
-        gcloud run deploy nodejs-azure \
+        gcloud run deploy dotnet-azure \
           --image $(docker_namespace)/$(docker_repository) \
           --platform managed \
           --region us-central1 \

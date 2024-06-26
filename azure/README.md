@@ -18,7 +18,7 @@ O arquivo [azure-pipelines.yml](azure-pipelines.yml) é escrito em YAML, uma lin
 
 Ao adicionar ou modificar o arquivo [azure-pipelines.yml](azure-pipelines.yml) em um repositório do Azure DevOps, essa configuração será usada para automatizar o processo de integração contínua, executando os jobs definidos no arquivo sempre que houver uma alteração no repositório. Isso ajuda a garantir que o código seja compilado e testado de forma consistente e confiável.
 
-O arquivo [azure-pipelines.yml](azure-pipelines.yml) define uma pipeline de CI/CD para um aplicativo Node.js. A pipeline é acionada por commits nas branches master e releases/*, exceto quando o commit altera apenas o arquivo README.md.
+O arquivo [azure-pipelines.yml](azure-pipelines.yml) define uma pipeline de CI/CD para um aplicativo .Net. A pipeline é acionada por commits nas branches master e releases/*, exceto quando o commit altera apenas o arquivo README.md.
 
 Variáveis
 As variáveis do pipeline são definidas no grupo `toolboxGCP`.
@@ -26,14 +26,8 @@ As variáveis do pipeline são definidas no grupo `toolboxGCP`.
 Estágios
 A pipeline é dividida em vários estágios:
 
-Build
-O estágio de build realiza o checkout do repositório, instala o Node.js versão 18.x e navega até o diretório app para instalar as dependências do Node.js.
-
-Test
-O estágio de teste depende do estágio de build. Ele realiza o checkout do repositório, instala o Node.js versão 18.x, navega até o diretório app para instalar as dependências do Node.js e executa os testes.
-
 Push para o Docker Hub
-Este estágio depende do estágio de teste. Ele realiza o checkout do repositório, constrói uma imagem Docker com base no Dockerfile encontrado no repositório, faz login no Docker Hub e faz push da imagem para o Docker Hub. As tags da imagem Docker são definidas como o ID do build e latest.
+Ele realiza o checkout do repositório, constrói uma imagem Docker com base no Dockerfile encontrado no repositório, faz login no Docker Hub e faz push da imagem para o Docker Hub. As tags da imagem Docker são definidas como o ID do build e latest.
 
 Deploy
 Este estágio depende do estágio de push para o Docker Hub. Ele instala o Python versão 3.x, instala as dependências do Google, autentica com o Google Cloud usando uma service key e faz o deploy da imagem Docker para o Cloud Run.
