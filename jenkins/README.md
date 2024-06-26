@@ -59,6 +59,8 @@ No arquivo [Jenkinsfile](./dotnet/Jenkinsfile) coloque os valores corretos da se
 - DOCKER_REPOSITORY: Nome do repositório
 - DOCKER_TAG: Nome da tag, normalmente é `latest`.
 
+Após alterar, faça o commit e o push para o seu repositório.
+
 ## Uso
 
 ### Configurando uma Multibranch Pipeline
