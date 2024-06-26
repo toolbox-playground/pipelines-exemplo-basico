@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/media/marcelo/HDD/htdocs/toolbox/hello-world-com-docker-languages/dotnet/dotnet.csproj": {}
+    "/media/marcelo/HDD/htdocs/toolbox/exemplos-pipelines/jenkins/dotnet/dotnet.csproj": {}
   },
   "projects": {
-    "/media/marcelo/HDD/htdocs/toolbox/hello-world-com-docker-languages/dotnet/dotnet.csproj": {
+    "/media/marcelo/HDD/htdocs/toolbox/exemplos-pipelines/jenkins/dotnet/dotnet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/media/marcelo/HDD/htdocs/toolbox/hello-world-com-docker-languages/dotnet/dotnet.csproj",
+        "projectUniqueName": "/media/marcelo/HDD/htdocs/toolbox/exemplos-pipelines/jenkins/dotnet/dotnet.csproj",
         "projectName": "dotnet",
-        "projectPath": "/media/marcelo/HDD/htdocs/toolbox/hello-world-com-docker-languages/dotnet/dotnet.csproj",
+        "projectPath": "/media/marcelo/HDD/htdocs/toolbox/exemplos-pipelines/jenkins/dotnet/dotnet.csproj",
         "packagesPath": "/home/marcelo/.nuget/packages/",
-        "outputPath": "/media/marcelo/HDD/htdocs/toolbox/hello-world-com-docker-languages/dotnet/obj/",
+        "outputPath": "/media/marcelo/HDD/htdocs/toolbox/exemplos-pipelines/jenkins/dotnet/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/marcelo/.nuget/NuGet/NuGet.Config"

@@ -15,7 +15,7 @@ pipeline {
                 }
             }
             steps { // Define the steps of the stage Install
-                sh 'cd jenkins/app && npm install' // Execute the command to install the dependencies
+                sh 'cd jenkins/nodejs && npm install' // Execute the command to install the dependencies
             }
         }
         stage('Test') { // Define the stage Test
@@ -25,7 +25,7 @@ pipeline {
                 }
             }
             steps { // Define the steps of the stage Test
-                sh 'cd jenkins/app && npm install && npm test' // Execute the command to run the tests
+                sh 'cd jenkins/nodejs && npm install && npm test' // Execute the command to run the tests
             }
         }
         stage('Build Docker Image') { // Define the stage Build Docker Image
@@ -33,7 +33,7 @@ pipeline {
             steps { // Define the steps of the stage Build Docker Image
                 script { // Define the script to execute
                     // Build the Docker image
-                    sh "cd jenkins && docker build -t ${env.DOCKER_NAMESPACE}/${env.DOCKER_REPOSITORY}:${env.DOCKER_TAG} ." // Execute the command to build the Docker image
+                    sh "cd jenkins/nodejs && docker build -t ${env.DOCKER_NAMESPACE}/${env.DOCKER_REPOSITORY}:${env.DOCKER_TAG} ." // Execute the command to build the Docker image
                 }
             }
         }
