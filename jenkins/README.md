@@ -54,6 +54,11 @@ Foi utlizado o [How to automate jenkins setup with docker and jenkins configurat
 
 Para saber mais sobre o arquivo [casc.yaml](casc.yaml]), após subir o jenkins, acesse [http://localhost:8080/manage/configuration-as-code/reference](http://localhost:8080/manage/configuration-as-code/reference)
 
+No arquivo [Jenkinsfile](./dotnet/Jenkinsfile) coloque os valores corretos da seguinte variráveis:
+- DOCKER_NAMESPACE: Nome da Organização ou de usuário.
+- DOCKER_REPOSITORY: Nome do repositório
+- DOCKER_TAG: Nome da tag, normalmente é `latest`.
+
 ## Uso
 
 ### Configurando uma Multibranch Pipeline
@@ -103,11 +108,8 @@ Certifique-se de substituir o `seu-usuario` pelo seu usuário GitHub.
 
 16. Clique em "Salvar" para salvar as configurações do projeto.
 
-17. No arquivo [Jenkinsfile](./dotnet/Jenkinsfile) coloque os valores corretos da seguinte variráveis:
-- DOCKER_NAMESPACE: Nome da Organização ou de usuário.
-- DOCKER_REPOSITORY: Nome do repositório
-- DOCKER_TAG: Nome da tag, normalmente é `latest`.
-
 Agora você configurou uma Multibranch Pipeline no Jenkins e definiu segredos para o usuário e senha do Docker e do GitHub. 
 
-Na tela que irá aparecer, clique em `main` e depois em `Construir agora` e irá disparar a pipeline.
+Na tela que irá aparecer, aguarde ate ser finalizada a pipeline, isso mesmo, a pipeline já foi disparada. Após finalizar, clique em Histórico de Compilações. 
+
+Clique no link Pipeline Jenkins >> main e você verá o que foi feito pela pipeline.
