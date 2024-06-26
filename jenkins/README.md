@@ -73,9 +73,11 @@ Para configurar uma Multibranch Pipeline no Jenkins e definir segredos para o us
 
 4. Na página de criação do projeto, digite um nome para o projeto, neste exemplo foi utilizado `Pipeline Jenkins`, e selecione "Multibranch Pipeline" como o tipo de projeto.
 
-5. Clique em "OK" para confirmar a criação do projeto.
+5. Clique em "Tudo certo" para confirmar a criação do projeto.
 
-6. Na página de configuração do projeto, vá até a seção "Branch Sources"e:
+6. Na página de configuração do projeto, vá até a seção "Branch Sources":
+
+- Clique em Add source e depois em GitHub.
 
 - Adicione as credenciais do GitHub clicando em `+Add` e selecionando `Pipeline Juenkins`.
 
