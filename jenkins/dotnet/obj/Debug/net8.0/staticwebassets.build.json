@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "85Sn+6XTDjCAHzQEto054cW9LoRwiqGmdY9ltt23iSY=",
+  "Source": "dotnet",
+  "BasePath": "_content/dotnet",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "dotnet/wwwroot",
+      "Source": "dotnet",
+      "ContentRoot": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/",
+      "BasePath": "_content/dotnet",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/images/toolbox-playground.png",
+      "SourceId": "dotnet",
+      "SourceType": "Discovered",
+      "ContentRoot": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/",
+      "BasePath": "_content/dotnet",
+      "RelativePath": "images/toolbox-playground.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/toolbox-playground.png"
+    },
+    {
+      "Identity": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/images/toolbox.jpg",
+      "SourceId": "dotnet",
+      "SourceType": "Discovered",
+      "ContentRoot": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/",
+      "BasePath": "_content/dotnet",
+      "RelativePath": "images/toolbox.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/toolbox.jpg"
+    },
+    {
+      "Identity": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/index.html",
+      "SourceId": "dotnet",
+      "SourceType": "Discovered",
+      "ContentRoot": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/",
+      "BasePath": "_content/dotnet",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    }
+  ]
+}

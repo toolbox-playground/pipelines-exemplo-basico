@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/images/toolbox-playground.png",
+      "PackagePath": "staticwebassets/images/toolbox-playground.png"
+    },
+    {
+      "Id": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/images/toolbox.jpg",
+      "PackagePath": "staticwebassets/images/toolbox.jpg"
+    },
+    {
+      "Id": "/media/marcelo/HDD/htdocs/toolbox/hello-world-languages/dotnet/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.dotnet.props",
+      "PackagePath": "build\\dotnet.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.dotnet.props",
+      "PackagePath": "buildMultiTargeting\\dotnet.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.dotnet.props",
+      "PackagePath": "buildTransitive\\dotnet.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.dotnet.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

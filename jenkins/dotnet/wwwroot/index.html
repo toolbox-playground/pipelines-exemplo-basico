@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Definindo a codificação de caracteres -->
+    <meta charset="UTF-8" />
+    <!-- Definindo a compatibilidade com o Internet Explorer -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Definindo a escala inicial para dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Definindo o título da página -->
+    <title>Bem-Vindo ao Hello World .Net Asp da ToolBox Playground</title>
+    <!-- Definindo o ícone da página -->
+    <link rel="icon" type="image/x-icon" href="/images/toolbox-playground.png">
+    <!-- Incluindo o script do Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Configurações do Tailwind CSS
+      tailwind.config = {
+        theme: {
+          screens: {
+            sm: "480px",
+            md: "760px",
+            lg: "976px",
+            xl: "1440px",
+            xxl: "1920px",
+          },
+        },
+      };
+    </script>
+    <!-- Incluindo scripts adicionais do Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  </head>
+  <body class="bg-slate-100">
+    <div class="flex flex-col">
+        <div class="m-auto my-10 md:my-10 md:m-auto">
+            <!-- Título principal -->
+            <h1 class="text-bold text-4xl">
+                Bem-Vindo ao Hello World .Net Asp da ToolBox Playground
+            </h1>
+        </div>
+        <div class="max-w-sm m-auto mt-20">
+            <!-- Imagem com classe de animação -->
+            <img src='/images/toolbox-playground.png' class="animate-bounce">
+        </div>
+    </div>
+  </body>
+</html>

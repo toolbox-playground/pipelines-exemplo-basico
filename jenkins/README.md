@@ -30,6 +30,7 @@ Neste repositório será utlizado a imagem docker do jenkins (jenkins/jenkins:lt
     ```bash
     docker run --name jenkins --rm -p 8080:8080 -p 50000:50000 --volume jenkins-data:/var/jenkins_home --volume /var/run/docker.sock:/var/run/docker.sock --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:local
     ```
+    Essa configuração é usada quando para permitir que o contêiner Docker acesse o daemon do Docker no host, permitindo que ele execute operações relacionadas ao Docker, como criar, iniciar ou parar outros contêineres.
 
 5. Abra seu navegador e visite `http://localhost:8080` para ver a página inicial do Jenkins.
 
