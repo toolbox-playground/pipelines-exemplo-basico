@@ -21,13 +21,13 @@ Os exemplos neste repositório podem servir como ponto de partida para configura
 
 2.Clone este repositório para sua máquina local através do comando abaixo:
 ```bash
-git clone https://github.com/toolbox-playground/exemplos-pipelines.git
+git clone https://github.com/toolbox-playground/pipelines-exemplo-basico
 ```
 
 3. Navegue até o diretório que você acabou de clonar.
 
    ```bash
-    cd exemplos-pipelines
+    cd pipelines-exemplo-basico
    ```
 
 4. Escolha a pipeline de sua prefrência disponível:
@@ -71,6 +71,14 @@ git clone https://github.com/toolbox-playground/exemplos-pipelines.git
    cd azure
    ```
 2. Siga as instruções do [Azure](./azure/README.md)
+
+- Jenkins: 
+
+1. Navegue até o diretório Jenkins.
+   ```bash
+   cd jenkins
+   ```
+2. Siga as instruções do [Jenkins](./jenkins/README.md)
 
 ## Desafio GitHub
 
