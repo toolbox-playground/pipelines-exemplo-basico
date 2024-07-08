@@ -1,4 +1,4 @@
- # Pipeline Harness CI/CD
+ # Pipeline Harness
 
 ![Toolbox Playground](../img/toolbox-playground.png)
 
