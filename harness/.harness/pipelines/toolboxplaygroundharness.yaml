@@ -1,6 +1,6 @@
 pipeline:
-  name: pipelines-harness-exemplo-basico
-  identifier: pipelinesharnessexemplobasico
+  name: pipelines-harness-exemplo-basico-playground
+  identifier: pipelinesharnessexemplobasicoplayground
   projectIdentifier: default_project
   orgIdentifier: default
   tags: {}
