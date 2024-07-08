@@ -1,4 +1,4 @@
-# exemplos-pipelines
+# Exemplos Básicos de Pipelines
 
 ![Toolbox Playground](img/toolbox-playground.png)
 
