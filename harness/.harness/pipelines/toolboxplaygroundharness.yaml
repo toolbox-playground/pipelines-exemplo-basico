@@ -33,9 +33,7 @@ pipeline:
                   spec:
                     shell: Sh
                     command: |-
-                      echo "Building nodejs app"
-                      ls -la
-                      cd harness/app
+                      cd app
                       npm install
                   description: instal npm packages
               - step:
@@ -46,7 +44,7 @@ pipeline:
                     shell: Sh
                     command: |-
                       echo "Running tests"
-                      cd harness/app
+                      cd app
                       npm install
                       npm test
                       echo "test completed successfully"
@@ -57,7 +55,6 @@ pipeline:
                   identifier: Build_and_Push_Docker_Image
                   spec:
                     connectorRef: Docker_Toolbox
-                    dockerfilePath: harness/app/Dockerfile
                     repo: toolboxplayground/pipelines-exemplo-basico-desafio
                     tags:
                       - latest
