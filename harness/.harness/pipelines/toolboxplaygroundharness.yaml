@@ -33,8 +33,10 @@ pipeline:
                   spec:
                     shell: Sh
                     command: |-
+                      echo "Building nodejs app"
                       cd app
                       npm install
+                      echo "Build completed successfully"
                   description: instal npm packages
               - step:
                   type: Run
