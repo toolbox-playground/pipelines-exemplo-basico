@@ -1,0 +1,14 @@
+inputSet:
+  name: pipelines-harness-exemplo-basico-push-trigger-input-set
+  identifier: pipelinesharnessexemplobasicopushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: pipelinesharnessexemplobasico
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>

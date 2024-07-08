@@ -1,0 +1,63 @@
+pipeline:
+  name: pipelines-harness-exemplo-basico
+  identifier: pipelinesharnessexemplobasico
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: Toolbox_Playground
+        repoName: harness
+        build: <+input>
+  stages:
+    - stage:
+        name: NodeJS
+        identifier: NodeJS
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Build
+                  identifier: Build
+                  spec:
+                    shell: Sh
+                    command: |-
+                      cd app
+                      npm install
+                  description: instal npm packages
+              - step:
+                  type: Run
+                  name: Test
+                  identifier: Test
+                  spec:
+                    shell: Sh
+                    command: |-
+                      echo "Running tests"
+                      cd app
+                      npm install
+                      npm test
+                      echo "test completed successfully"
+                  description: Test nodejs app
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: Build and Push Docker Image
+                  identifier: Build_and_Push_Docker_Image
+                  spec:
+                    connectorRef: Docker_Toolbox
+                    repo: toolboxplayground/pipelines-exemplo-basico-desafio
+                    tags:
+                      - latest
+          caching:
+            enabled: true
+            paths: []
