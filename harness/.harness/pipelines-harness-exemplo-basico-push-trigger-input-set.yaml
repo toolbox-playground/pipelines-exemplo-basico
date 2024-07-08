@@ -4,7 +4,7 @@ inputSet:
   orgIdentifier: default
   projectIdentifier: default_project
   pipeline:
-    identifier: pipelinesharnessexemplobasico
+    identifier: pipelinesharnessexemplobasicoplayground
     properties:
       ci:
         codebase:
