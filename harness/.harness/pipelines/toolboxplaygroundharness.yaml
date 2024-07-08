@@ -33,6 +33,8 @@ pipeline:
                   spec:
                     shell: Sh
                     command: |-
+                      echo "Building nodejs app"
+                      ls -la
                       cd harness/app
                       npm install
                   description: instal npm packages
