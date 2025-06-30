@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## 1.1.23 (2025-06-30)
+
+
+### Bug Fixes
+
+* Pipeline was not properly configured. ([9d4b96c](https://github.com/toolbox-playground/pipelines-exemplo-basico/commit/9d4b96ccbc4c1df96d1b49b7a561b970dc3f172c))
+
 ## 1.1.22 (2024-07-08)
 
 ## 1.1.21 (2024-07-08)
