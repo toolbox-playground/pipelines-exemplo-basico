@@ -40,7 +40,7 @@ jobs:
                   npm run release -- --release-as patch
                   echo "{{ Patching Versioning }}"
                 elif [[ $text =~ (BREAKING\ CHANGE) ]]; then
-                  npm run release -- --release-as patch
+                  npm run release -- --release-as major
                   echo "{{ Major Versioning }}"
                 elif [[ $text =~ (feat) ]]; then
                   echo "{{ Minor Versioning }}"
