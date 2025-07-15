@@ -1,0 +1,32 @@
+name: Secrets Check with Trivy
+on:
+  push:
+    branches:
+      - main  # Aciona o fluxo de trabalho quando houver push na brach main
+    paths:
+      - 'trivy/python'  # Aciona o fluxo de trabalho quando houver push na pasta trivy
+  pull_request:
+    branches:
+      - main # Aciona o fluxo de trabalho quando houver PR na brach main
+    paths:
+      - 'trivy/python'  # Aciona o fluxo de trabalho quando houver PR na pasta trivy
+  workflow_dispatch:  # Aciona manualmente o fluxo de trabalho
+    inputs:  # Define entradas para o fluxo de trabalho
+      name:  # Define a entrada "name"
+        description: 'Acionador manual do fluxo de trabalho'  # Descrição da entrada
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code # Ação para clonar o repositório
+        uses: actions/checkout@v4 # Usa a ação para clonar o repositório
+        
+      - name: Docker Build # Constrói a imagem Docker
+        run: docker build -t trivy-python:latest -f trivy/python/Dockerfile trivy/python # Constrói a imagem Docker
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.20.0 # Usa a ação para executar o scanner de vulnerabilidades Trivy
+        with:
+          scan-type: 'image' # Define o tipo de verificação
+          image-ref: 'trivy-python:latest' # Define a referência da imagem
