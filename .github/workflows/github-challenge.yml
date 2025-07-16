@@ -1,91 +1,150 @@
 name: Publish Docker image version
 
 on:
-  push:  # Evento que aciona o fluxo de trabalho (no caso, um push)
+  push: # Evento que aciona o fluxo de trabalho (no caso, um push)
     branches:
-        - main
+      - main # O workflow só será acionado por pushes na branch 'main'
     paths:
-      - 'challenges/github/**' # Inclui a pasta challenges/github e todos os seus arquivos
+      - 'challenges/github/**' # Inclui a pasta challenges/github e todos os seus arquivos, acionando o workflow apenas para mudanças nesta subpasta
   workflow_dispatch: # Evento que aciona o fluxo de trabalho manualmente
     inputs: # Define os inputs do fluxo de trabalho
       name: # Define o input "name"
         description: 'Trigger manual do Workflow' # Descrição do input
+        required: false # Torna o input opcional para o trigger manual
 
 jobs:
 
-  build:  # Nome do trabalho
-    name: Build Node.js  # Nome do trabalho
-    runs-on: ubuntu-latest  # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
-    steps:  # Passos a serem executados no trabalho
-      - uses: actions/checkout@v4  # Passo para fazer o checkout do repositório
-      - name: Build Node.js  # Nome do passo
-        uses: actions/setup-node@v4  # Passo para configurar o ambiente Node.js
+  build: # Nome do trabalho
+    name: Build Node.js # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    steps: # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4 # Passo para fazer o checkout do repositório
+      - name: Setup Node.js # Nome do passo
+        uses: actions/setup-node@v4 # Passo para configurar o ambiente Node.js
         with:
-          node-version: '18.x'  # Versão do Node.js a ser usada
-      - name: Install dependencies  # Nome do passo
-        run: cd challenges/github/app && npm install  # Comando para instalar as dependências do projeto
+          node-version: '18.x' # Versão do Node.js a ser usada
+      - name: Install dependencies # Nome do passo
+        run: cd challenges/github/app && npm install # Comando para instalar as dependências do projeto na pasta correta
 
-  
   test: # Nome do trabalho
     name: Test Node.js # Nome do trabalho
     runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
     needs: build # Define que o trabalho depende do trabalho "build"
     steps: # Passos a serem executados no trabalho
       - uses: actions/checkout@v4 # Passo para fazer o checkout do repositório
-      - name: Test Node.js # Nome do passo
+      - name: Setup Node.js # Nome do passo
         uses: actions/setup-node@v4 # Passo para configurar o ambiente Node.js
         with:
           node-version: '18.x' # Versão do Node.js a ser usada
-      - name: Install dependencies # Nome do passo
-        run: cd challenges/github/app && npm install # Comando para instalar as dependências do projeto
+      - name: Install dependencies # Necessário novamente se não estiver usando cache ou artefatos entre jobs
+        run: cd challenges/github/app && npm install # Comando para instalar as dependências do projeto na pasta correta
       - name: Run tests # Nome do passo
-        run: cd challenges/github/app && npm test # Comando para executar os testes do projeto
+        run: cd challenges/github/app && npm test # Comando para executar os testes do projeto na pasta correta
+
+  trufflehog_scan:
+    name: TruffleHog Secret Scan
+    runs-on: ubuntu-latest
+    needs: test # Garante que os testes passaram antes de escanear segredos
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Usando a versão v4 para consistência
+
+      - name: Install TruffleHog
+        run: |
+          mkdir -p sec && cd sec # Cria o diretório 'sec' se não existir e navega para ele
+          curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Secret Scanning with TruffleHog
+        run: |
+          trufflehog filesystem . --only-verified # Varrer segredos no contexto do repositório. Considere remover '--only-verified' para uma varredura mais abrangente se o nível de falsos positivos for gerenciável.
+
+  sonarcloud: # Nome do trabalho
+    name: SonarCloud Scan # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    needs: test # Garante que os testes passaram antes da análise de código
+    steps: # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4 # Passo para fazer o checkout do repositório (usando v4 para consistência)
+        with: # Define os parâmetros do passo
+          fetch-depth: 0 # Desativar o clone superficial é recomendado para melhorar a relevância dos relatórios (ex: análise de New Code)
+
+      - name: SonarCloud Scan # Executa a análise do SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master # Usa a ação de análise do SonarCloud
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.projectName=${{ secrets.SONAR_PROJECT_NAME }}
+            -Dsonar.projectVersion=1.0
+            -Dsonar.sources=./challenges/github/app # Define o diretório base para a análise do SonarCloud, onde está o código-fonte da aplicação
+            -Dsonar.language=js
+            -Dsonar.sourceEncoding=UTF-8
+            # Para incluir cobertura e relatórios de teste no SonarCloud:
+            # -Dsonar.javascript.lcov.reportPaths=challenges/github/app/coverage/lcov.info # Exemplo para relatórios LCOV (Jest)
+            # -Dsonar.testExecutionReportPaths=challenges/github/app/test-results/sonar.xml # Exemplo para relatórios de testes (Junit-like)
+        env: # Define as variáveis de ambiente
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Token padrão fornecido pelo GitHub Actions
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Token de autenticação para o SonarCloud
+
+  snyk: # Nome do trabalho
+    name: Snyk Security Check # Nome do trabalho
+    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
+    needs: test # Garante que os testes passaram antes da análise de dependências
+    steps: # Passos a serem executados no trabalho
+      - uses: actions/checkout@v4 # Passo para fazer o checkout do repositório (usando v4 para consistência)
+      - name: Run Snyk to check for vulnerabilities # Executa o Snyk para verificar vulnerabilidades
+        uses: snyk/actions/node@master # Usa a ação do Snyk para Node.js
+        with: # Define os parâmetros da ação
+          args: --packages-folder=./challenges/github/app # Verifica as dependências na pasta específica do projeto
+        env: # Define as variáveis de ambiente
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Define o token do Snyk
 
   push_to_registry:
-    name: Build and Push Docker image to Docker Hub and Deploy on Cloud Run
-    runs-on: ubuntu-latest  # Define o sistema operacional em que o fluxo de trabalho será executado
-    needs: test  # Define que o trabalho depende do trabalho "test"
+    name: Build and Push Docker image to Docker Hub
+    runs-on: ubuntu-latest # Define o sistema operacional em que o fluxo de trabalho será executado
+    needs: [test, trufflehog_scan, sonarcloud, snyk] # Todos os jobs anteriores (testes, varreduras de segurança e qualidade) devem passar antes de construir e enviar a imagem Docker
     permissions: # Define as permissões necessárias para o trabalho
-      packages: write # Define as permissões de escrita para pacotes
-      contents: read # Define as permissões de leitura para conteúdos
-      id-token: write # Define as permissões de escrita para tokens de ID
-      attestations: write # Define as permissões de escrita para atestações
+      packages: write # Define as permissões de escrita para pacotes (usado para Docker Hub)
+      contents: read # Define as permissões de leitura para conteúdos do repositório
+      id-token: write # Define as permissões de escrita para tokens de ID (usado por algumas ações de segurança/autenticação)
+      attestations: write # Define as permissões de escrita para atestações (geração de proveniência de build)
     steps: # Define os passos a serem executados no trabalho
-      - name: Check out the repo  # Faz o checkout do repositório
+      - name: Check out the repo # Faz o checkout do repositório
         uses: actions/checkout@v4 # Usa a ação de checkout do repositório
 
-      - name: Log in to Docker Hub  # Faz login no Docker Hub
+      - name: Log in to Docker Hub # Faz login no Docker Hub
         uses: docker/login-action@v3 # Usa a ação de login no Docker Hub
         with: # Define os parâmetros da ação
-          username: ${{ secrets.DOCKER_USERNAME }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para username
-          password: ${{ secrets.DOCKER_PASSWORD }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para password
+          username: ${{ secrets.DOCKER_USERNAME }} # Usa as credenciais do Docker Hub armazenadas como segredos no repositório para username
+          password: ${{ secrets.DOCKER_PASSWORD }} # Usa as credenciais do Docker Hub armazenadas como segredos no repositório para password
 
-      - name: Extract metadata (tags, labels) for Docker  # Extrai metadados (tags, labels) para o Docker
-        id: meta # Define um ID para o passo
+      - name: Extract metadata (tags, labels) for Docker # Extrai metadados (tags, labels) para o Docker
+        id: meta # Define um ID para o passo, permitindo que outros passos acessem suas saídas
         uses: docker/metadata-action@v5 # Usa a ação de metadados do Docker
         with: # Define os parâmetros da ação
-          images: "${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}"  # Define as imagens Docker a serem processadas
-          tags: | 
-            type=raw,value=latest
-            type=raw,value=${{ github.run_number }}
-            type=ref,event=tag
+          images: "${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}" # Define as imagens Docker a serem processadas (namespace/repositório)
+          tags: |
+            type=raw,value=latest # Adiciona a tag 'latest'
+            type=raw,value=${{ github.run_number }} # Adiciona a tag com o número da execução do workflow
+            type=ref,event=tag # Adiciona tags baseadas em tags Git (se aplicável)
 
-      - name: Build and push Docker image  # Constrói e envia a imagem Docker para o Docker Hub
+      - name: Build and push Docker image # Constrói e envia a imagem Docker para o Docker Hub
         id: push # Define um ID para o passo
         uses: docker/build-push-action@v5 # Usa a ação de construção e envio de imagem do Docker
         with: # Define os parâmetros da ação
-          context: ./challenges/github  # Define o contexto do build, neste caso, o diretório atual
-          # file: ./Dockerfile  # Especifica o arquivo Dockerfile a ser usado
-          push: true  # Define se a imagem deve ser enviada para o Docker Hub
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}  # Define as labels da imagem com base nos metadados extraídos
+          context: ./challenges/github # Define o contexto do build para a pasta onde o Dockerfile e o código da aplicação residem
+          # file: ./challenges/github/Dockerfile # Se o Dockerfile não estiver na raiz do contexto (challenges/github), especifique o caminho completo aqui
+          push: true # Define se a imagem deve ser enviada para o Docker Hub
+          tags: ${{ steps.meta.outputs.tags }} # Usa as tags extraídas pelo passo 'meta'
+          labels: ${{ steps.meta.outputs.labels }} # Define as labels da imagem com base nos metadados extraídos
 
-      - name: Generate artifact attestation  # Gera uma atestação de artefato
+      - name: Generate artifact attestation # Gera uma atestação de artefato (para proveniência de build)
         uses: actions/attest-build-provenance@v1 # Usa a ação de atestação de proveniência de build
         with: # Define os parâmetros da ação
-          subject-name: ${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}  # Define o nome do assunto da atestação
-          subject-digest: ${{ steps.push.outputs.digest }}  # Define o digest do assunto da atestação
-          push-to-registry: true  # Define se a atestação deve ser enviada para o registro      
+          subject-name: ${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }} # Define o nome do assunto da atestação (geralmente o nome completo da imagem)
+          subject-digest: ${{ steps.push.outputs.digest }} # Define o digest (hash) do assunto da atestação (digest da imagem Docker construída)
+          push-to-registry: true # Define se a atestação deve ser enviada para o registro
 
   docker_test: # Nome do trabalho
     name: Run Docker Container # Nome do trabalho
@@ -93,99 +152,62 @@ jobs:
     needs: push_to_registry # Define que o trabalho depende do trabalho "push_to_registry"
 
     steps: # Passos a serem executados no trabalho
-      
-    - name: Checkout repository # Faz o checkout do repositório
-      uses: actions/checkout@v2 # Usa a ação de checkout do repositório
 
-    - name: Log in to Docker Hub  # Faz login no Docker Hub
-      uses: docker/login-action@v3 # Usa a ação de login no Docker Hub
-      with: # Define os parâmetros da ação
-        username: ${{ secrets.DOCKER_USERNAME }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para username
-        password: ${{ secrets.DOCKER_PASSWORD }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório para password
+      - name: Checkout repository # Faz o checkout do repositório
+        uses: actions/checkout@v4 # Usa a ação de checkout do repositório (usando v4 para consistência)
 
-    - name: Pull Docker Image # Faz o pull da imagem Docker
-      run: docker pull ${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest # Usa as credenciais do Docker Hub armazenadas como secretos no repositório
+      - name: Log in to Docker Hub # Faz login no Docker Hub
+        uses: docker/login-action@v3 # Usa a ação de login no Docker Hub para garantir a autenticação
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Run Docker Container # Executa o container Docker
-      run: docker run -d --name nodejs -p 8080:8080 ${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }} # Usa as credenciais do Docker Hub armazenadas como secretos no repositório
+      - name: Pull Docker Image # Faz o pull da imagem Docker
+        run: docker pull ${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest # Pull da imagem mais recente
 
-    - name: Wait for Container to be ready # Espera o container estar pronto
-      run: sleep 10 # Espera 10 segundos
+      - name: Run Docker Container # Executa o container Docker
+        run: docker run -d --name nodejs -p 8080:8080 ${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }} # Inicia o container em segundo plano
 
-    - name: Check if container is running # Verifica se o container está rodando
-      run: docker ps -f 'name=nodejs' # Checa se o container está rodando
+      - name: Wait for Container to be ready # Espera o container estar pronto
+        run: |
+          timeout 120 bash -c 'until curl --silent --fail http://localhost:8080/health; do echo "Waiting for container to be ready..."; sleep 5; done'
+          # ALERTA: Substitua '/health' pelo endpoint de saúde real do seu app, ou um endpoint que responda quando o app estiver pronto.
+          # Se não houver um healthcheck, pode ser a rota principal (http://localhost:8080), mas é menos robusto.
 
-    - name: Access Container
-      run: curl -s http://localhost:8080
+      - name: Check if container is running # Verifica se o container está rodando
+        run: docker ps -f 'name=nodejs' # Checa se o container com o nome 'nodejs' está ativo
 
-    - name: Stop and Remove Docker Container # Para e remove o container Docker
-      run: docker rm -f nodejs # Para e remove o container Docker
+      - name: Access Container (Example Health Check) # Tenta acessar o container para verificar se responde
+        run: curl -s http://localhost:8080 # ou http://localhost:8080/health se tiver um healthcheck específico
+
+      - name: Stop and Remove Docker Container # Para e remove o container Docker para limpar o ambiente
+        run: docker rm -f nodejs # Para e remove o container 'nodejs' forçadamente
 
   cloud_run:
     name: Deploy on Cloud Run # Nome do trabalho
     runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
     needs: docker_test # Define que o trabalho depende do trabalho "docker_test"
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: 'read' # Permissão para ler o conteúdo do repositório
+      id-token: 'write' # Permissão para escrever o token de identidade (necessário para autenticação no Google Cloud)
 
     steps:
-
       - name: Checkout repository # Faz o checkout do repositório
-        uses: actions/checkout@v2 # Usa a ação de checkout do repositório
+        uses: actions/checkout@v4 # Usa a ação de checkout do repositório (usando v4 para consistência)
 
-      - name: Deploy on Cloud Run # Faz o deploy da aplicação no Cloud Run
+      - name: Authenticate to Google Cloud # Autentica no Google Cloud usando Workload Identity Federation
         uses: 'google-github-actions/auth@v2' # Usa a ação de autenticação do Google Cloud
         with: # Define os parâmetros da ação
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTIFIER_PROVIDER }} # Define o provedor de identidade do workload
-          service_account: ${{ secrets.SERVICE_ACCOUNT }} # Define a conta de serviço
-        
-      - id: 'deploy' # Define um ID para o passo
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # Define a conta de serviço a ser usada para autenticação
+
+      - id: 'deploy' # Define um ID para o passo, permitindo que outros passos acessem suas saídas
         uses: 'google-github-actions/deploy-cloudrun@v2' # Usa a ação de deploy no Cloud Run
         with: # Define os parâmetros da ação
-          service: ${{ vars.CLOUD_RUN_SERVICE_NAME }} # Define o nome do serviço no Cloud Run
-          image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest" # Define a imagem a ser usada no Cloud Run
-          flags: '--allow-unauthenticated' # Define as flags para o deploy no Cloud Run que libera o acesso para usuários não autenticados
+          service: ${{ vars.CLOUD_RUN_SERVICE_NAME }} # Define o nome do serviço no Cloud Run para o deploy
+          image: "${{ vars.DOCKER_REGISTRY }}/${{ vars.DOCKER_NAMESPACE }}/${{ vars.DOCKER_REPOSITORY }}:latest" # Define a imagem Docker a ser usada no Cloud Run (a mais recente construída)
+          flags: '--allow-unauthenticated' # Define as flags para o deploy no Cloud Run que libera o acesso para usuários não autenticados (cuidado em produção)
 
-      - name: 'Access Cloud Run' # Usa o CLI do Google Cloud
-        run: "curl -s ${{ steps.deploy.outputs.url }}" # Acessa o Cloud Run
-        continue-on-error: true # Continua a execução mesmo se houver erro
-
-  sonarcloud: # Nome do trabalho
-    name: SonarCloud Scan # Nome do trabalho
-    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
-    steps: # Passos a serem executados no trabalho
-    - uses: actions/checkout@v3 # Passo para fazer o checkout do repositório
-      with: # Define os parâmetros do passo
-        # Desativar o clone superficial é recomendado para melhorar a relevância dos relatórios
-        fetch-depth: 0
-        
-    - name: SonarCloud Scan # Executa a análise do SonarCloud
-      uses: sonarsource/sonarcloud-github-action@master # Usa a ação de análise do SonarCloud
-      with:
-        args: >
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-          -Dsonar.organization=${{ secrets.SONAR_ORG }}
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.projectName=${{ secrets.SONAR_PROJECT_NAME }}
-          -Dsonar.projectVersion=1.0
-          -Dsonar.sources=./challenges/github
-          -Dsonar.language=js
-          -Dsonar.sourceEncoding=UTF-8
-      env: # Define as variáveis de ambiente
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  snyk: # Nome do trabalho
-    name: Snyk Security Check # Nome do trabalho
-    runs-on: ubuntu-latest # Sistema operacional em que o trabalho será executado (no caso, Ubuntu)
-    steps: # Passos a serem executados no trabalho
-      - uses: actions/checkout@master # Passo para fazer o checkout do repositório
-      - name: Run Snyk to check for vulnerabilities # Executa o Snyk para verificar vulnerabilidades
-        uses: snyk/actions/node@master # Usa a ação do Snyk para Node.js
-        with: # Define os parâmetros da ação
-          #args: --all-projects --packages-folder=./challenges/github # Veirifica todas as dependências do projeto
-          args: --packages-folder=./challenges/github/app # Veirifica todas as dependências do projeto
-        env: # Define as variáveis de ambiente
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Define o token do Snyk
+      - name: 'Access Cloud Run' # Tenta acessar a URL do serviço Cloud Run após o deploy
+        run: "curl -s ${{ steps.deploy.outputs.url }}" # Acessa a URL de saída do deploy do Cloud Run
+        continue-on-error: true # Continua a execução do workflow mesmo se o comando curl falhar (útil para não quebrar o pipeline por um problema de rede temporário)
