@@ -41,4 +41,3 @@ jobs:  # Definição dos trabalhos a serem executados
         run: cd github/app && npm install # Comando para instalar as dependências do projeto
       - name: Run tests # Nome do passo
         run: cd github/app && npm test # Comando para executar os testes do projeto
-        
