@@ -4,7 +4,7 @@
   "description": "Create CI-CD for cloud build pipeline example for bitbucket",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "nyc mocha",
     "start": "node server.js"
   },
   "repository": {
@@ -22,6 +22,19 @@
   },
   "devDependencies": {
     "mocha": "^10.2.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "report-dir": "./coverage",
+    "reporter": ["lcov", "text"],
+    "include": [
+      "index.js",
+      "server.js"
+    ],
+    "exclude": [
+      "node_modules",
+      "test.js"
+    ]
   }
 }
