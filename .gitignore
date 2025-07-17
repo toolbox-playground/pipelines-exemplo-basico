@@ -2,3 +2,7 @@
 
 node_modules/*
 jenkins/dotnet/obj
+
+# Pastas de output de teste e cobertura
+**/coverage/
+**/.nyc_output/
